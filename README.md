@@ -1,12 +1,28 @@
 # TV Streaming — Kodi Repository
 
-Repository source (once GitHub Pages is enabled): `https://rickirl91.github.io/tv-streaming-kodi/`
+Hosted Kodi file source: https://rickirl91.github.io/tv-streaming-kodi/
 
-Distributes a standalone Kodi navigation-preset add-on: `plugin.video.tvstreaming.catalogue`.
+The add-on `plugin.video.tvstreaming.catalogue` installs a profile-scoped Arctic Fuse 3 navigation preset; it never applies that preset without an explicit backup-and-apply confirmation.
 
-The first release is an **unverified Xbox pilot**. It backs up and modifies Standard-profile Arctic Fuse 3 shortcut JSON only when you explicitly confirm in the add-on menu. Keep Kids separate.
+## v0.2.1 — navigation update (Xbox confirmation pending)
 
-For steps, see `README_SETUP.txt`.
+Horizontal menu: Search (magnifier), Home, **Streaming Services**, Movies, TV Shows, Documentaries, **Trakt - Upcoming Episodes** (calendar icon on the right), Power.
 
-## v0.2.0 pilot (Xbox validation pending)
-The My Lists & Trakt hub is now first after Home. Arctic Fuse 3 shows only the first four custom hubs as left-hand text tabs; Streaming Services remains accessible from the right side and via Home submenu. TMDb search adds a People & Filmographies results source. Previously blank documentary/provider widgets received targeted adjustments; their live results still require testing on Xbox. Existing v0.1.0 ZIP remains available for rollback.
+This is a layout-only change relative to 0.2.0. All existing movie, TV, documentary, provider, search and Trakt widget paths remain intact. No Kodi skin modification, account changes or Kids-profile changes.
+
+### Xbox update instructions
+
+1. Kodi → Add-ons → Install from zip file → existing `rickirl91` source.
+2. Install `plugin.video.tvstreaming.catalogue-0.2.1.zip`.
+3. Video add-ons → TV Streaming Catalogue & Preset → **Install / Update Standard Arctic Fuse 3 Preset**.
+4. Confirm the adult profile name, then choose **Back up + apply**.
+5. If navigation is stale, choose **Rebuild Arctic Fuse 3 Shortcuts & Widgets** in the same add-on, then return Home.
+6. Restore prior menu if needed using **Restore Latest Backup**.
+
+Earlier ZIPs are kept for rollback: [v0.2.0](plugin.video.tvstreaming.catalogue-0.2.0.zip) and [v0.1.0](plugin.video.tvstreaming.catalogue-0.1.0.zip).
+
+Kodi repository metadata (`addons.xml` + `addons.xml.md5`) and versioned ZIP paths are also published for repository clients, although direct ZIP installation is the method already proven on Xbox.
+
+### v0.2.0 history
+
+Search people source, updated new/returning-show discovery, attempted empty provider/documentary row fixes and explicit rebuild action. Some metadata filters are still subject to Xbox validation.

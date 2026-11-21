@@ -1,31 +1,26 @@
-TV STREAMING — KODI REPOSITORY PUBLISHING KIT v0.1.0
+TV STREAMING — XBOX KODI INSTALL / UPDATE
+=======================================
 
-NOT YET PUBLISHED. Your public Kodi source URL will only work AFTER creating the repository, uploading these files and enabling GitHub Pages.
+The repository is already hosted at:
+  https://rickirl91.github.io/tv-streaming-kodi/
 
-GitHub username: rickirl91
-Recommended GitHub repository name: tv-streaming-kodi
-Expected Kodi source (AFTER publishing): https://rickirl91.github.io/tv-streaming-kodi/
+UPDATE TO v0.2.1 (STANDARD/ADULT PROFILE ONLY)
+1. Kodi > Add-ons > Install from zip file > rickirl91.
+2. Select plugin.video.tvstreaming.catalogue-0.2.1.zip.
+3. Open Video add-ons > TV Streaming Catalogue & Preset.
+4. Select Install / Update Standard Arctic Fuse 3 Preset.
+5. Confirm the adult Kodi profile, then Back up + apply.
+6. If the old menu remains, select Rebuild Arctic Fuse 3 Shortcuts & Widgets.
+7. Expected labelled left menu: Home, Streaming Services, Movies, TV Shows, Documentaries.
+8. Trakt - Upcoming Episodes will be the calendar icon on the right.
 
-PUBLIC REPOSITORY SETUP
-1. In your GitHub account, create a new PUBLIC repository named tv-streaming-kodi, using 'main' as the default branch.
-2. Download and EXTRACT the publishing-kit ZIP.
-3. Upload all extracted CONTENTS (not the outer directory and not the ZIP itself) into the root of the GitHub repository.
-   This includes the hidden .nojekyll file, addons.xml, addons.xml.md5, index.html, the repository ZIP, and the zips/ directory with nested add-on ZIPs.
-   You can use GitHub Desktop to clone, copy the files, Commit, and Push if browser upload of folders is awkward.
-4. On GitHub: repository Settings → Pages → Build and deployment → Deploy from a branch → main / (root) → Save.
-5. Once Pages says the site is live, open https://rickirl91.github.io/tv-streaming-kodi/ in Safari. It should show a link to repository.tvstreaming.catalogue-1.0.0.zip.
-6. Only then, on Xbox Kodi: Settings → File manager → Add source → https://rickirl91.github.io/tv-streaming-kodi/; name it TV Streaming.
-7. Kodi Add-ons → Install from zip file → TV Streaming → repository.tvstreaming.catalogue-1.0.0.zip. You may be asked to enable Unknown Sources to proceed.
-8. Kodi Add-ons → Install from repository → TV Streaming Repository → Video add-ons → TV Streaming Catalogue & Preset.
-9. In the Standard profile, open the add-on, back up and apply the preset; Kids remains separate.
+ROLLBACK: In the same add-on, choose Restore Latest Backup.
 
-WARNING: this is an OFFLINE VALIDATED PREVIEW RELEASE. NOT YET XBOX TESTED.
-Do not overwrite your existing Kodi installation or install in Kids profile.
-If your GitHub username or repository name differs, the repository add-on's URLs must be rebuilt before publishing.
+WARNING: Installing the add-on ZIP alone does not apply the preset. The installed
+add-on will back up and replace the current profile's Arctic Fuse 3 JSON
+navigation files only after confirmation. Keep Kids separate.
 
-UPDATE PROCESS
-For later releases, upload the new add-on ZIP under zips/plugin.video.tvstreaming.catalogue/ and update addons.xml plus addons.xml.md5 accordingly.
-Kodi can then discover a newer add-on package through the installed repository. Applying its navigation preset is still an explicit user action.
-
-
-UPDATE v0.2.0: The repository connection is not yet proven reliable on Xbox. If Install from repository fails, use Install from zip file > existing TV Streaming source > plugin.video.tvstreaming.catalogue-0.2.0.zip, then run TV Streaming Catalogue & Preset > Install / Update and optionally Rebuild Arctic Fuse 3 Shortcuts & Widgets. This backs up active-profile navigation before applying. Do not apply in Kids profile.
+THE REPOSITORY: repository.tvstreaming.catalogue-1.0.0.zip is the repository
+installer. Kodi may report that it cannot fetch the repository index; if so,
+continue to use the direct add-on ZIP method listed above, without changing
+Kodi account or playback settings.
