@@ -26,3 +26,6 @@ If your GitHub username or repository name differs, the repository add-on's URLs
 UPDATE PROCESS
 For later releases, upload the new add-on ZIP under zips/plugin.video.tvstreaming.catalogue/ and update addons.xml plus addons.xml.md5 accordingly.
 Kodi can then discover a newer add-on package through the installed repository. Applying its navigation preset is still an explicit user action.
+
+
+UPDATE v0.2.0: The repository connection is not yet proven reliable on Xbox. If Install from repository fails, use Install from zip file > existing TV Streaming source > plugin.video.tvstreaming.catalogue-0.2.0.zip, then run TV Streaming Catalogue & Preset > Install / Update and optionally Rebuild Arctic Fuse 3 Shortcuts & Widgets. This backs up active-profile navigation before applying. Do not apply in Kids profile.

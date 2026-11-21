@@ -7,3 +7,5 @@ b7ea62681262aacbce45467bba60d1788bcbc2a2fd823b85f00d98fb218a0477  README.md
 12e64c294ee3d1e0f58b3ac709fbc5527efe0039dc243391881a019f9f18a675  repository.tvstreaming.catalogue-1.0.0.zip
 76c70193a75db831feb233353170766f5c80e6f92c86abd01866d973a446ff34  zips/plugin.video.tvstreaming.catalogue/plugin.video.tvstreaming.catalogue-0.1.0.zip
 12e64c294ee3d1e0f58b3ac709fbc5527efe0039dc243391881a019f9f18a675  zips/repository.tvstreaming.catalogue/repository.tvstreaming.catalogue-1.0.0.zip
+3e9f5d10f61cd1cb3eea14d56f796deecf9dbaf20fe4b7701e6f00f27e7bd60a  zips/plugin.video.tvstreaming.catalogue/plugin.video.tvstreaming.catalogue-0.2.0.zip
+3e9f5d10f61cd1cb3eea14d56f796deecf9dbaf20fe4b7701e6f00f27e7bd60a  plugin.video.tvstreaming.catalogue-0.2.0.zip

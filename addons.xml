@@ -16,7 +16,7 @@
     <license>MIT</license>
   </extension>
 </addon>
-  <addon id="plugin.video.tvstreaming.catalogue" name="TV Streaming Catalogue &amp; Preset" version="0.1.0" provider-name="TV Streaming Project">
+  <addon id="plugin.video.tvstreaming.catalogue" name="TV Streaming Catalogue &amp; Preset" version="0.2.0" provider-name="TV Streaming Project">
  <requires><import addon="xbmc.python" version="3.0.0" /></requires>
  <extension point="xbmc.python.pluginsource" library="default.py"><provides>video</provides></extension>
  <extension point="xbmc.addon.metadata">
