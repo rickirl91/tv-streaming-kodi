@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addons>
+  <addon id="repository.tvstreaming.catalogue" name="TV Streaming Repository" version="1.0.0" provider-name="TV Streaming Project">
+  <extension point="xbmc.addon.repository">
+    <dir>
+      <info compressed="false">https://rickirl91.github.io/tv-streaming-kodi/addons.xml</info>
+      <checksum>https://rickirl91.github.io/tv-streaming-kodi/addons.xml.md5</checksum>
+      <datadir zip="true">https://rickirl91.github.io/tv-streaming-kodi/zips/</datadir>
+      <hashes>false</hashes>
+    </dir>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">TV Streaming navigation presets for Kodi</summary>
+    <description lang="en_GB">Install and update the TV Streaming Catalogue and Arctic Fuse 3 Standard preset. Optional installation and explicit backup required before changing navigation.</description>
+    <platform>all</platform>
+    <license>MIT</license>
+  </extension>
+</addon>
+  <addon id="plugin.video.tvstreaming.catalogue" name="TV Streaming Catalogue &amp; Preset" version="0.1.0" provider-name="TV Streaming Project">
+ <requires><import addon="xbmc.python" version="3.0.0" /></requires>
+ <extension point="xbmc.python.pluginsource" library="default.py"><provides>video</provides></extension>
+ <extension point="xbmc.addon.metadata">
+  <summary lang="en_GB">Arctic Fuse 3 Standard-profile streaming navigation</summary>
+  <description lang="en_GB">Applies a carefully backed-up custom home and hub arrangement using TMDb Helper. Also provides a browsable library of films, series, documentary categories, streaming services and Trakt recommendations. Designed for the current Kodi profile only. Does not configure playback or credentials.</description>
+  <platform>all</platform>
+  <license>MIT</license>
+  <language>en</language>
+ </extension>
+</addon>
+</addons>
