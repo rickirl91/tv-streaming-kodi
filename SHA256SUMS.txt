@@ -46,3 +46,5 @@ baddd054a0bfceae28ee38c8decbb01a59c24efa4a1d5b7611c4a1e7c910cbd3  plugin.video.s
 baddd054a0bfceae28ee38c8decbb01a59c24efa4a1d5b7611c4a1e7c910cbd3  zips/plugin.video.streamrow/plugin.video.streamrow-0.3.0-RC.zip
 544ea9fe3276c9f139dda2cd0f3632c56037065d1499f73acf6276cc061f31d9  script.tvstreaming.bulksetup-0.1.0-RC.zip
 544ea9fe3276c9f139dda2cd0f3632c56037065d1499f73acf6276cc061f31d9  zips/script.tvstreaming.bulksetup/script.tvstreaming.bulksetup-0.1.0-RC.zip
+605d0f42cd73d2ca29eb64fd7f050c9fddacaad6487a4e599754d8f492e33dd6  script.tvstreaming.lazywall-0.3.1-RC.zip
+605d0f42cd73d2ca29eb64fd7f050c9fddacaad6487a4e599754d8f492e33dd6  zips/script.tvstreaming.lazywall/script.tvstreaming.lazywall-0.3.1-RC.zip
