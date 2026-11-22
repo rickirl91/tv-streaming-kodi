@@ -4,6 +4,8 @@ on:
     branches: [main]
     paths:
       - .github/workflows/publish-lazywall-031.yml
+      - tools/lazywall-031-paging.patch
+      - tools/build-lazywall-031.py
   workflow_dispatch:
 
 permissions:
@@ -15,6 +17,22 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      - name: Extract existing source for patch inspection
+        run: |
+          python3 - <<'PY'
+          import zipfile, pathlib
+          with zipfile.ZipFile('script.tvstreaming.lazywall-0.3.0-RC.zip') as f:
+              candidate = [s for s in f.namelist() if s.endswith('/default.py')]
+              assert len(candidate) == 1, candidate
+              pathlib.Path('tools/lazywall-030-original.py').write_bytes(f.read(candidate[0]))
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tools/lazywall-030-original.py
+          if ! git diff --cached --quiet; then
+            git commit -m "Record existing Lazy Wall v0.3.0 source for pagination patch review"
+            git push origin HEAD:main
+          fi
       - name: Build and validate opt-in Kodi ZIP
         run: python3 tools/build-lazywall-031.py
       - name: Commit ZIP, checksum and installer listing
