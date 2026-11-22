@@ -34,3 +34,5 @@ ede274392086ed1fd848014dc4110942378482a956228e1288ba3b3fc83a725f  zips/script.tv
 93a7bf2c38463fee3795d513a11371742372101791fb199aaaf2f00f7c575708  zips/plugin.video.streamrow/plugin.video.streamrow-0.2.2-RC.zip
 9e02ce12853bb5b4204151a7721b74426b8703931ad09ab98fa21465ee5c497c  plugin.video.streamrow-0.2.3-RC.zip
 9e02ce12853bb5b4204151a7721b74426b8703931ad09ab98fa21465ee5c497c  zips/plugin.video.streamrow/plugin.video.streamrow-0.2.3-RC.zip
+9e3870582bd9b79efc477bec040a205dc64c6d264211f40292d93e3e3ebdf600  plugin.video.streamrow-0.2.4-RC.zip
+9e3870582bd9b79efc477bec040a205dc64c6d264211f40292d93e3e3ebdf600  zips/plugin.video.streamrow/plugin.video.streamrow-0.2.4-RC.zip
