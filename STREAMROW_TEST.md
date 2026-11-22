@@ -4,7 +4,7 @@
 
 ## Install on Xbox
 
-In Kodi's existing **TV Streaming Repository**, use **Install from repository → TV Streaming Repository → Video add-ons → StreamRow - See All First (Test)**. If it does not appear after Kodi refreshes the repository index, install the direct ZIP `plugin.video.streamrow-0.1.0.zip` from the existing `rickirl91` source (no new source needed).
+**Recommended on the current Xbox:** Open **Settings → Add-ons → Install from zip file → rickirl91 → plugin.video.streamrow-0.1.0.zip**. The existing `rickirl91` source is enough; you do not need to install a new Kodi repository. If the dedicated **TV Streaming Repository** is installed, the add-on can alternatively be found under **Install from repository → TV Streaming Repository → Video add-ons** after its index refreshes.
 
 Open **Video add-ons → StreamRow - See All First (Test) → Action - See All First (test)**.
 
