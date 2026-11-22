@@ -2,31 +2,27 @@
 
 Source: https://rickirl91.github.io/tv-streaming-kodi/
 
-## v0.2.2 — Streaming Services grouped by provider (Xbox validation pending)
+## v0.2.3 — Optional TMDb Movies playback-link setup
 
-Custom Arctic Fuse 3 Streaming Services hub now has **12 rows, grouped movie/series pairs**:
+- TMDb Movies playback confirmed directly in Xbox Kodi by user. Other tested add-ons have not produced working playback.
+- New *optional* action **Connect TMDb Movies Playback** is in TV Streaming Catalogue & Preset main menu.
+- Adds a single validated JSON player mapping for movies and episodes to the active profile's TMDb Helper `players` folder only after confirmation.
+- Based on upstream TMDb Movies `tmdb_resolve` endpoints from Angelitto; adapts title placeholders to TMDb Helper's documented keys and encodings.
+- Verifies TMDb Helper and TMDb Movies are installed; blocks common Kids profile names; backs up pre-existing same-name file; verifies the write and attempts rollback on failure.
+- **Does not** change default movie/episode player settings. Users set default via TMDb Helper > Configure > Players. Restart Kodi if player not listed.
+- **Does not** modify any navigation, widget, skin, Trakt, source, or playback provider settings. All v0.2.2 Arctic Fuse 3 navigation JSON files are byte-identical.
+- Installation and integrated playback remain to be tested on Xbox; no claims of successful TMDb Helper handoff yet.
 
-1. Netflix Movies / Netflix Series
-2. Disney+ Movies / Disney+ Series
-3. Prime Video Movies / Prime Video Series
-4. Apple TV+ Movies / Apple TV+ Series
-5. Paramount+ Movies / Paramount+ Series
-6. HBO Max Movies / HBO Max Series
+### Xbox setup
 
-The previous Prime Video Series widget returned No Results on the user's Xbox. The filter now requests regional provider 9/119 plus ad-tier 2100 and free-with-ads 613, with Ireland region and flatrate/ads/free access models. This is an evidence-based *candidate fix*, not a verified live outcome.
+1. Install `plugin.video.tvstreaming.catalogue-0.2.3.zip` from existing `rickirl91` Kodi source.
+2. Open Video add-ons > TV Streaming Catalogue & Preset > Connect TMDb Movies Playback (optional).
+3. Select Install player link in adult Kodi profile (TMDb Movies already installed).
+4. In TMDb Helper > Configure > Players, choose TMDb Movies (TV Streaming) as movie and episode default if it appears, or choose it from Play With dialog first.
+5. Test a permitted film and a TV episode from our current Arctic Fuse 3 lists. A Kodi restart may be necessary.
 
-The Streaming Services browse menu is aligned to the same provider/region queries. All other Arctic Fuse 3 hub files are unchanged. Existing Trakt upcoming-episodes/calendar icon, Search, Movies, TV Shows, Documentaries and Kids setup are left as before.
+### Navigation base retained from v0.2.2
 
-### Install on Xbox
+Home; Streaming Services paired provider movies/series; Movies; TV Shows; Documentaries; upcoming episodes calendar; Search. Other profiles are not changed by the playback-link action.
 
-1. Kodi → Add-ons → Install from zip file → existing `rickirl91` source.
-2. Select `plugin.video.tvstreaming.catalogue-0.2.2.zip`.
-3. Video add-ons → TV Streaming Catalogue & Preset → **Install / Update Standard Arctic Fuse 3 Preset**.
-4. Verify current adult profile, then **Back up + apply**.
-5. Run **Rebuild Arctic Fuse 3 Shortcuts & Widgets** from the same add-on if the old widget layout remains. Reload Home or fully restart Kodi.
-6. Confirm 12 Streaming Services rows and whether both Prime Video lists populate.
-
-If something is wrong, choose **Restore Latest Backup** within the add-on, then rebuild/restart. Previous 0.2.1, 0.2.0, and 0.1.0 package ZIPs are retained in the repository.
-
-> TMDb availability data can be incomplete or stale and does not guarantee a working playback source. Provider queries and content cannot be verified without Xbox/TMDb live execution.
-
+Previous version ZIPs are preserved for rollback.

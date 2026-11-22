@@ -16,12 +16,12 @@
     <license>MIT</license>
   </extension>
 </addon>
-  <addon id="plugin.video.tvstreaming.catalogue" name="TV Streaming Catalogue &amp; Preset" version="0.2.2" provider-name="TV Streaming Project">
+  <addon id="plugin.video.tvstreaming.catalogue" name="TV Streaming Catalogue &amp; Preset" version="0.2.3" provider-name="TV Streaming Project">
  <requires><import addon="xbmc.python" version="3.0.0" /></requires>
  <extension point="xbmc.python.pluginsource" library="default.py"><provides>video</provides></extension>
  <extension point="xbmc.addon.metadata">
   <summary lang="en_GB">Arctic Fuse 3 Standard-profile streaming navigation</summary>
-  <description lang="en_GB">Applies a carefully backed-up custom home and hub arrangement using TMDb Helper. Also provides a browsable library of films, series, documentary categories, streaming services and Trakt recommendations. Designed for the current Kodi profile only. Does not configure playback or credentials.</description>
+  <description lang="en_GB">Applies a carefully backed-up custom home and hub arrangement using TMDb Helper. Also provides a browsable library of films, series, documentary categories, streaming services and Trakt recommendations. Designed for the current Kodi profile only. An optional, explicit action adds a TMDb Movies playback link. Does not change playback defaults or credentials.</description>
   <platform>all</platform>
   <license>MIT</license>
   <language>en</language>
