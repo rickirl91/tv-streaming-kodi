@@ -212,6 +212,25 @@ def show_movie_tv_item(handle, media, record):
     xbmcplugin.addDirectoryItem(handle, path, item, isFolder=is_folder)
 
 
+
+def neutral_see_all_art():
+    """Reuse the exact standard StreamRow 'Miami' See All tile on Xbox.
+
+    StreamRow is already installed for Cricky catalogue sections. Resolve its
+    actual Kodi addon path (no hardcoded Xbox storage location). A skin folder
+    icon is a neutral fallback, never a show/movie poster.
+    """
+    try:
+        streamrow = xbmcaddon.Addon('plugin.video.streamrow')
+        artwork = os.path.join(streamrow.getAddonInfo('path'), 'resources',
+                               'media', 'see_all_miami_neutral_v024.png')
+        if xbmcvfs.exists(artwork) or os.path.isfile(artwork):
+            return artwork
+    except Exception as exc:
+        log('StreamRow See All asset unavailable: {}'.format(repr(exc)), xbmc.LOGWARNING)
+    return 'special://skin/extras/icons/folder.png'
+
+
 def handle_feed(handle, query):
     kind = query.get('kind', [''])[0]
     mode = query.get('mode', ['widget'])[0]
@@ -228,17 +247,19 @@ def handle_feed(handle, query):
     combined = interleave_movie_tv(rows)
     xbmcplugin.setContent(handle, 'videos')
     if mode == 'widget':
-        poster = None
-        fanart = None
+        # Keep the first title's fanart as the Home hero/backdrop, but do not
+        # borrow its poster. The first tile must show the existing StreamRow
+        # neutral SEE ALL image just like the established catalogue widgets.
+        artwork = neutral_see_all_art()
+        picture = {'poster': artwork, 'thumb': artwork, 'icon': artwork}
         if combined:
             entry = combined[0][1]
             art = entry.get('art') or {}
             if not isinstance(art, dict):
                 art = {}
-            poster = art.get('poster') or entry.get('thumbnail')
             fanart = art.get('fanart') or entry.get('fanart')
-        picture = {'poster': poster, 'thumb': poster, 'fanart': fanart}
-        picture = {k: v for k, v in picture.items() if v}
+            if fanart:
+                picture['fanart'] = fanart
         add_folder(handle, 'See All - ' + core.LABEL_BY_KIND[kind],
                    feed_link(kind, 'all'), picture,
                    'Browse movies and TV series together. Follow Next Page to load additional titles.')
@@ -322,6 +343,49 @@ def restore_latest():
     DIALOG.ok('Cricky Home', 'Original Home widgets restored exactly. Fully restart Kodi.')
 
 
+
+def preview_cleanup():
+    _, _, original, _ = home_snapshot()
+    candidates = core.cleanup_candidates(original)
+    if not candidates:
+        DIALOG.ok('Cricky Home cleanup', 'No overlapping older rows were found. Nothing to change.')
+        return
+    remaining = core.plan_cleanup(original)
+    details = ('Remove ONLY the following older Home widgets:\n\n' +
+               '\n'.join('{}. {}'.format(index + 1, row['label']) for index, row in candidates)
+               + '\n\n{} existing rows will remain in their original order.\n'
+                 'Continue Watching, Up Next Episodes, the three personalised '
+                 'widgets, all other Home sections, and other Kodi profiles are unchanged.'
+                 .format(len(remaining)))
+    DIALOG.textviewer('Preview duplicate cleanup - read only', details)
+
+
+def cleanup_duplicates():
+    path, raw, original, _ = home_snapshot()
+    candidates = core.cleanup_candidates(original)
+    if not candidates:
+        DIALOG.ok('Cricky Home cleanup', 'No overlapping older rows were found. Nothing to change.')
+        return
+    labels = '\n'.join('• ' + row['label'] for _, row in candidates)
+    DIALOG.textviewer('Duplicate cleanup preview - nothing changed',
+                      'The following {} older Home rows will be removed:\n\n{}\n\n'
+                      'All other widgets, including Up Next Episodes, remain unchanged.'
+                      .format(len(candidates), labels))
+    if not DIALOG.yesno('Remove redundant Home widgets?',
+                        'Create a verified backup and remove exactly {} older rows?\n'
+                        'All newer personalised and other Home widgets remain.'.format(len(candidates))):
+        return
+    verify_cricky()
+    backup = core.apply_home(path, backups_path(), core.sha256(raw), current_profile(),
+                             planner=core.plan_cleanup)
+    if backup is None:
+        DIALOG.ok('Cricky Home cleanup', 'No change necessary.')
+        return
+    xbmc.executebuiltin('RunScript(script.skinvariables,template=special://skin/shortcuts/skinvariables-generator.json)')
+    DIALOG.ok('Cricky Home cleanup', 'Redundant rows removed and a byte-exact backup saved.\n'
+              'Fully restart Kodi to refresh the Home screen.')
+
+
 def handle_action(action):
     if action == 'inspect':
         inspect_only()
@@ -335,6 +399,10 @@ def handle_action(action):
         preview_and_apply()
     elif action == 'restore':
         restore_latest()
+    elif action == 'cleanup_preview':
+        preview_cleanup()
+    elif action == 'cleanup':
+        cleanup_duplicates()
     else:
         raise ValueError('Unknown action')
 
@@ -346,7 +414,9 @@ def list_menu(handle):
             ('2. Preview proposed Home order (read-only)', 'preview', 'Does not make changes.'),
             ('3. Test six Family Trakt film/TV sources (read-only)', 'preflight', 'Verifies all six endpoints respond.'),
             ('4. Apply Home personalisation (one confirmation)', 'apply', 'Backs up, verifies, then changes only Cricky Home.'),
-            ('5. Restore latest automatic backup', 'restore', 'Only if no newer Home edits exist.'),
+            ('5. Preview redundant-row cleanup (read-only)', 'cleanup_preview', 'Show exactly which duplicate rows would be removed.'),
+            ('6. Remove redundant Home rows (one confirmation)', 'cleanup', 'Backs up Cricky Home before removing the four older overlapping rows.'),
+            ('7. Restore latest automatic backup', 'restore', 'Only if no newer Home edits exist.'),
     ):
         add_folder(handle, label,
                    'plugin://{}/?{}'.format(core.ADDON_ID, urlencode({'action': action})),

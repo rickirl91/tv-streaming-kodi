@@ -1,4 +1,4 @@
-Cricky Home Personalisation — v0.1.0 RC
+Cricky Home Personalisation — v0.1.1 RC
 ======================================
 
 INSTALLING THE ZIP DOES NOT CHANGE KODI.
@@ -9,7 +9,9 @@ Open Add-ons > Video Add-ons > TV Streaming - Cricky Home Personalisation.
 2. Preview planned Home order (read only)
 3. Test six Family Trakt sources (read only)
 4. Apply personalisation (preview and one confirmation)
-5. Restore latest backup (conflict checked)
+5. Preview which older overlapping Home rows to remove (read only)
+6. Remove older overlapping Home rows (one confirmation)
+7. Restore latest backup (conflict checked)
 
 Requirement: actively logged in to Kodi profile "Cricky" using Arctic Fuse 3.
 TMDb Helper must be enabled and its History/Watchlist sync providers must
@@ -35,3 +37,14 @@ visually update, regenerate widgets in Arctic Fuse 3 shortcut customisation.
 
 RELEASE STATUS: offline logic/backup tests passed; live Xbox feed performance,
 artwork, widget navigation and Trakt provider identity remain to verify.
+
+0.1.1 RC:
+- Reuse the installed StreamRow neutral Miami SEE ALL tile instead of assigning
+  the first recommendation's show/film poster to the launcher. Keep the first
+  item's hero backdrop. If StreamRow artwork cannot be found, use a neutral
+  skin folder icon, never a film/TV poster.
+- Optional separate cleanup of 4 old overlapping Home sections, with exact
+  labels, detailed preview, explicit confirmation and independent backup.
+- Does not delete Up Next Episodes, existing unrelated rows or Trakt data.
+- Installing this update alone DOES NOT modify Home widgets. Run menu action 6
+  only after viewing the preview in action 5.

@@ -76,6 +76,40 @@ def plan_home(original):
     return result
 
 
+# Exact labels from the old, separate recommendations/watchlist widgets. The
+# new blended rows supersede these on Cricky Home only. Do not use substrings:
+# a different user's custom label must never be removed accidentally.
+OBSOLETE_LABELS = frozenset({
+    'your movie watchlist',
+    'your tv show watchlist',
+    'your tv shows watchlist',
+    'recommended movies for you',
+    'recommended shows for you',
+    'recommended tv shows for you',
+})
+
+
+def cleanup_candidates(original):
+    """Return exact-index obsolete rows only after verifying the new Home hub."""
+    if not isinstance(original, list) or len(original) < 4 or not all(isinstance(r, dict) for r in original):
+        raise ValueError('Unsupported or incomplete Cricky Home widgets')
+    expected = ['continue watching'] + [canonical_label(label) for _, label, _ in LABELS]
+    actual = [canonical_label(row.get('label')) for row in original[:4]]
+    if actual != expected:
+        raise ValueError('Home first four rows are not the approved Cricky layout; cleanup refused')
+    for idx, (kind, _, _) in enumerate(LABELS, 1):
+        if original[idx].get('path') != widget_path(kind):
+            raise ValueError('Personalised widget source differs from installed RC; cleanup refused')
+    return [(index, row) for index, row in enumerate(original)
+            if index >= 4 and canonical_label(row.get('label')) in OBSOLETE_LABELS]
+
+
+def plan_cleanup(original):
+    """Keep all objects byte-for-byte semantically, except exact obsolete rows."""
+    drop = {index for index, _ in cleanup_candidates(original)}
+    return [row for index, row in enumerate(original) if index not in drop]
+
+
 def load_home(raw):
     data = json.loads(raw.decode('utf-8-sig'))
     if not isinstance(data, list):
@@ -109,7 +143,7 @@ def _atomic_replace(path, content):
             os.unlink(tmp)
 
 
-def apply_home(homepath, backup_root, expected_hash, profile='Cricky'):
+def apply_home(homepath, backup_root, expected_hash, profile='Cricky', planner=None):
     if profile.casefold() != 'cricky':
         raise ValueError('Only the Cricky profile may be changed')
     homepath = Path(homepath)
@@ -118,7 +152,7 @@ def apply_home(homepath, backup_root, expected_hash, profile='Cricky'):
     old = homepath.read_bytes()
     if sha256(old) != expected_hash:
         raise RuntimeError('Home widgets changed after preview; no changes applied')
-    edited = serialize_home(plan_home(load_home(old)))
+    edited = serialize_home((planner or plan_home)(load_home(old)))
     if edited == old:
         return None
     name = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
