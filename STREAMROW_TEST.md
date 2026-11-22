@@ -15,3 +15,10 @@ Verify that (1) See All appears first, (2) the movie posters and information loa
 The package is static and has no background tasks or API keys.
 
 The ZIP is available at `https://rickirl91.github.io/tv-streaming-kodi/plugin.video.streamrow-0.1.0.zip`. Previous catalogue releases remain untouched.
+
+
+## v0.2.1 RC: neutral first-position See All tile
+- Replaces the old bright blue tile image with neutral charcoal 3x3 grid artwork. The highlight colour still comes from the active Arctic Fuse skin (Miami pink in current profile).
+- Supports Action and other named movie categories; the first tile launches the v0.2.1 rolling Lazy Wall test.
+- **Does not** automatically replace the working Cricky homepage widget. Install directly from ZIP: `plugin.video.streamrow-0.2.1-RC.zip` after Lazy Wall v0.2.1 RC.
+- SHA256: `56f1d14f5ae2fe63e6b126b4b73f5c7f88c77fe0b6df1282bcd0008e8d7fa16a`.

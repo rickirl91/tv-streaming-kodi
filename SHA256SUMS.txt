@@ -26,3 +26,7 @@ dfd0859c2add11631dd7496e1bc0f13fb352459bbd31f2b96aaa4310347a11f8  zips/plugin.vi
 831595e2f8ece69efbfe2062742205616f42b3d8ff9d7778d1b9cf7d524f6914  zips/script.tvstreaming.lazywall/script.tvstreaming.lazywall-0.1.3.zip
 af9b0e2038e8119ca9d43e3d96fe52578753aade0622620ec9cd17101dfd4ec8  script.tvstreaming.lazywall-0.1.4.zip
 af9b0e2038e8119ca9d43e3d96fe52578753aade0622620ec9cd17101dfd4ec8  zips/script.tvstreaming.lazywall/script.tvstreaming.lazywall-0.1.4.zip
+ede274392086ed1fd848014dc4110942378482a956228e1288ba3b3fc83a725f  script.tvstreaming.lazywall-0.2.1-RC.zip
+ede274392086ed1fd848014dc4110942378482a956228e1288ba3b3fc83a725f  zips/script.tvstreaming.lazywall/script.tvstreaming.lazywall-0.2.1-RC.zip
+56f1d14f5ae2fe63e6b126b4b73f5c7f88c77fe0b6df1282bcd0008e8d7fa16a  plugin.video.streamrow-0.2.1-RC.zip
+56f1d14f5ae2fe63e6b126b4b73f5c7f88c77fe0b6df1282bcd0008e8d7fa16a  zips/plugin.video.streamrow/plugin.video.streamrow-0.2.1-RC.zip
