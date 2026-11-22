@@ -27,4 +27,22 @@
   <language>en</language>
  </extension>
 </addon>
+<addon id="plugin.video.streamrow" name="StreamRow - See All First (Test)" version="0.1.0" provider-name="Local TV setup">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+        <import addon="plugin.video.themoviedb.helper" version="0.0.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">Prototype of a See All-first movie widget.</summary>
+        <description lang="en_GB">A non-destructive test: prepends See All to TMDb Helper Action movie results. Does not change your skin, players or TMDb Helper settings.</description>
+        <platform>all</platform>
+        <license>MIT</license>
+        <assets>
+            <icon>resources/media/see_all.png</icon>
+        </assets>
+    </extension>
+</addon>
 </addons>
