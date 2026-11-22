@@ -8,7 +8,7 @@ This project builds the shared **Cricky** streaming experience on Xbox Kodi with
 
 | Component | Current ZIP | Purpose |
 | --- | --- | --- |
-| Lazy Wall | `script.tvstreaming.lazywall-0.3.1-RC.zip` | Poster wall, paging, details, playback and trailers |
+| Home Personalisation (RC) | `plugin.video.tvstreaming.homepersonalisation-0.1.0-RC.zip` | Preview-first Family Trakt mixed film/TV rows; current Cricky Home only; restores safely |\n| Lazy Wall | `script.tvstreaming.lazywall-0.3.1-RC.zip` | Poster wall, paging, details, playback and trailers |
 | StreamRow | `plugin.video.streamrow-0.3.0-RC.zip` | Skin-friendly See All launcher and category widgets |
 | Bulk Setup | `script.tvstreaming.bulksetup-0.1.0-RC.zip` | One-time safe migration of supported homepage catalogue rows |
 | Catalogue & Preset | `plugin.video.tvstreaming.catalogue-0.2.3.zip` | Original navigation preset and optional playback link |
@@ -18,9 +18,9 @@ Install through Kodi **Settings → Add-ons → Install from zip file → rickir
 ## Verified and outstanding
 
 - Xbox: Action Movies and Netflix Movies now scroll beyond 20 titles on Lazy Wall 0.3.1 RC.
-- Xbox: TV Series expanded-wall pagination still requires a final check.
+- Xbox: Disney Series, Apple Series and Trending TV pagination were tested beyond 20 titles.
 - Earlier tests confirmed working poster-wall navigation, film details, Play, trailer viewing/return, the See All hero preview and Miami-style neutral poster.
-- Before declaring Cricky complete: confirm shared Trakt behaviour, representative TV episode playback, remaining provider/genre filters, and final backup. Personalised shared-history recommendations need finalisation.
+- Before declaring Cricky complete: confirm shared Trakt behaviour, representative TV episode playback, remaining provider/genre filters, and final backup. Personalised shared-history recommendations are packaged as RC and await Xbox acceptance.
 - No claims of production acceptance beyond tested paths.
 
 ## Repository layout

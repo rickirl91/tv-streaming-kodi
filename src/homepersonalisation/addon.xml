@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.tvstreaming.homepersonalisation" name="TV Streaming - Cricky Home Personalisation (RC)" version="0.1.0" provider-name="TV Streaming">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0" />
+    <import addon="plugin.video.themoviedb.helper" />
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Preview and safely personalise Cricky's Arctic Fuse 3 Home</summary>
+    <description lang="en_GB">Three blended Trakt film and TV rows with a byte-exact Home widget backup, one-confirmation apply and change-safe restore. Only applies to the active Cricky profile. Does not touch playback configuration, watched history, other hubs or profiles.</description>
+    <platform>all</platform>
+    <license>MIT</license>
+  </extension>
+</addon>

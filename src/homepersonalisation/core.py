@@ -1,0 +1,198 @@
+# -*- coding: utf-8 -*-
+"""Pure, unit-testable Home layout planner and lossless backup/restore helpers.
+
+Only the active Cricky profile's homewidgets file is eligible for writes.
+No automatic edits on addon installation, startup or widget browsing.
+"""
+import hashlib
+import json
+import os
+import re
+import tempfile
+from datetime import datetime, timezone
+from pathlib import Path
+from urllib.parse import parse_qs, urlparse, urlencode
+
+ADDON_ID = 'plugin.video.tvstreaming.homepersonalisation'
+TMDB = 'plugin.video.themoviedb.helper'
+TARGET_NAME = 'skinvariables-shortcut-homewidgets.json'
+LABELS = (
+    ('recommended', 'Recommended For You', 'trakt_recommendations'),
+    ('because', 'Because You Watched', 'sync_becauseyouwatched'),
+    ('watchlist', 'From Your Watchlist', 'sync_watchlist'),
+)
+LABEL_BY_KIND = {kind: label for kind, label, _ in LABELS}
+INFO_BY_KIND = {kind: endpoint for kind, _, endpoint in LABELS}
+
+
+def canonical_label(value):
+    if not isinstance(value, str):
+        return ''
+    return ' '.join(re.sub(r'\[[^\]]+\]', '', value).split()).casefold()
+
+
+def source_url(kind, media):
+    if kind not in INFO_BY_KIND or media not in ('movie', 'tv'):
+        raise ValueError('Unsupported feed or media type')
+    return 'plugin://{}/?{}'.format(TMDB, urlencode({'info': INFO_BY_KIND[kind], 'tmdb_type': media}))
+
+
+def valid_source(path, kind, media):
+    if not isinstance(path, str) or len(path) > 3072:
+        return False
+    parsed = urlparse(path)
+    if parsed.scheme != 'plugin' or parsed.netloc != TMDB or parsed.path not in ('', '/'):
+        return False
+    query = parse_qs(parsed.query)
+    return (query.get('info') == [INFO_BY_KIND.get(kind)]
+            and query.get('tmdb_type') == [media]
+            and not parsed.fragment)
+
+
+def widget_path(kind):
+    return 'plugin://{}/?{}'.format(ADDON_ID, urlencode({'action': 'feed', 'kind': kind, 'mode': 'widget'}))
+
+
+def plan_home(original):
+    if not isinstance(original, list) or not original or not all(isinstance(r, dict) for r in original):
+        raise ValueError('Unsupported Home JSON: expected a non-empty list of widget objects')
+    if not all(isinstance(row.get('label'), str) for row in original):
+        raise ValueError('Cannot safely edit Home: an existing row has no string label')
+    watching = [r for r in original if canonical_label(r['label']) == 'continue watching']
+    if len(watching) != 1:
+        raise ValueError('Expected exactly one Continue Watching row; found {}'.format(len(watching)))
+    progress_row = watching[0]
+    customised = {canonical_label(label) for _, label, _ in LABELS}
+    remaining = [r for r in original if r is not progress_row and canonical_label(r['label']) not in customised]
+    new_rows = [{
+        'label': label,
+        'icon': '',
+        'path': widget_path(kind),
+        'target': 'videos',
+    } for kind, label, _ in LABELS]
+    result = [progress_row] + new_rows + remaining
+    assert len(result) == len(remaining) + 4
+    assert result[0] is progress_row
+    return result
+
+
+def load_home(raw):
+    data = json.loads(raw.decode('utf-8-sig'))
+    if not isinstance(data, list):
+        raise ValueError('Home widget JSON is not a list')
+    return data
+
+
+def serialize_home(rows):
+    return (json.dumps(rows, indent=4, ensure_ascii=False) + '\n').encode('utf-8')
+
+
+def sha256(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+def _atomic_replace(path, content):
+    path = Path(path)
+    fd, tmp = tempfile.mkstemp(prefix='.cricky-home-', dir=str(path.parent))
+    try:
+        try:
+            os.fchmod(fd, path.stat().st_mode & 0o777)
+        except (AttributeError, OSError):
+            pass
+        with os.fdopen(fd, 'wb') as out:
+            out.write(content)
+            out.flush()
+            os.fsync(out.fileno())
+        os.replace(tmp, str(path))
+    finally:
+        if os.path.exists(tmp):
+            os.unlink(tmp)
+
+
+def apply_home(homepath, backup_root, expected_hash, profile='Cricky'):
+    if profile.casefold() != 'cricky':
+        raise ValueError('Only the Cricky profile may be changed')
+    homepath = Path(homepath)
+    if homepath.name != TARGET_NAME:
+        raise ValueError('Refusing unexpected widget filename')
+    old = homepath.read_bytes()
+    if sha256(old) != expected_hash:
+        raise RuntimeError('Home widgets changed after preview; no changes applied')
+    edited = serialize_home(plan_home(load_home(old)))
+    if edited == old:
+        return None
+    name = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
+    folder = Path(backup_root) / name
+    folder.mkdir(parents=True, exist_ok=False)
+    # Original bytes are kept exactly, including original encoding and newline style.
+    backup = folder / TARGET_NAME
+    with open(backup, 'xb') as out:
+        out.write(old)
+        out.flush()
+        os.fsync(out.fileno())
+    if backup.read_bytes() != old:
+        raise RuntimeError('Backup verification failed; original Home file untouched')
+    manifest = {
+        'version': 1,
+        'profile': profile,
+        'filename': TARGET_NAME,
+        'before_sha256': sha256(old),
+        'after_sha256': sha256(edited),
+        'created_utc': name,
+    }
+    with open(folder / 'manifest.json', 'x', encoding='utf-8') as out:
+        json.dump(manifest, out, indent=2)
+        out.flush()
+        os.fsync(out.fileno())
+    if sha256(homepath.read_bytes()) != expected_hash:
+        raise RuntimeError('Home widgets changed during backup; no changes applied')
+    _atomic_replace(homepath, edited)
+    if sha256(homepath.read_bytes()) != manifest['after_sha256']:
+        raise RuntimeError('Home write integrity check failed; original backup is at ' + str(folder))
+    return folder
+
+
+def latest_backup(backup_root):
+    root = Path(backup_root)
+    if not root.is_dir():
+        return None
+    folders = sorted((p for p in root.iterdir() if p.is_dir() and (p / 'manifest.json').is_file()), reverse=True)
+    return folders[0] if folders else None
+
+
+def restore_home(homepath, folder, profile='Cricky'):
+    if profile.casefold() != 'cricky':
+        raise ValueError('Only the Cricky profile may be changed')
+    homepath, folder = Path(homepath), Path(folder)
+    manifest = json.loads((folder / 'manifest.json').read_text('utf-8'))
+    if (manifest.get('profile', '').casefold() != profile.casefold()
+            or manifest.get('filename') != TARGET_NAME
+            or homepath.name != TARGET_NAME):
+        raise ValueError('Backup belongs to a different profile/file')
+    before = (folder / TARGET_NAME).read_bytes()
+    if sha256(before) != manifest['before_sha256']:
+        raise RuntimeError('Backup checksum mismatch')
+    current = homepath.read_bytes()
+    if sha256(current) == manifest['before_sha256']:
+        return 'already-restored'
+    if sha256(current) != manifest['after_sha256']:
+        raise RuntimeError('Home has newer manual changes. Restore blocked to protect those changes.')
+    _atomic_replace(homepath, before)
+    if sha256(homepath.read_bytes()) != manifest['before_sha256']:
+        raise RuntimeError('Restore integrity check failed')
+    return 'restored'
+
+
+def summary(original, proposed):
+    old_names = [r['label'] for r in original]
+    new_names = [r['label'] for r in proposed]
+    return ('Current Home widgets: {}\nProposed Home widgets: {}\n\n'
+            'New order (first eight):\n{}\n\n'
+            'No change to other hubs or Kodi profiles.\n'
+            'Existing Continue Watching object is preserved verbatim.\n'
+            'Other existing widgets retain their original relative order and properties.\n'
+            'Movie and TV lists are merged live without changing Trakt history.\n\n'
+            'IMPORTANT: Sync History/Watchlist providers in TMDb Helper must point '
+            'to your Family Trakt account; a login in another add-on is not proof.\n'
+            'A full Kodi restart / SkinVariables widget rebuild may be required.') .format(
+                len(old_names), len(new_names), '\n'.join('{}. {}'.format(i + 1, name) for i, name in enumerate(new_names[:8])))

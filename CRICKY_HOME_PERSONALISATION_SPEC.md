@@ -1,6 +1,6 @@
 # Cricky — Home tab personalisation and ordering (approved design)
 
-Status: **approved layout; implementation pending**. This file is not a deployed Xbox change. Do not claim the Home widgets are modified until the Kodi update has been installed and verified.
+Status: **RC installer packaged; live Xbox acceptance pending**. This file is not a deployed Xbox change. Do not claim the Home widgets are modified until the Kodi update has been installed and verified.
 
 ## Required order
 
@@ -40,3 +40,4 @@ The `sync_*` routes use TMDb Helper's selected History/Watchlist sync source. On
 
 - https://github.com/jurialmunkey/plugin.video.themoviedb.helper/wiki/Lists-Trakt
 - https://github.com/jurialmunkey/plugin.video.themoviedb.helper/wiki/List-Endpoints
+\n## Implementation candidate (22 Nov 2026)\n\nThe standalone `plugin.video.tvstreaming.homepersonalisation-0.1.0-RC.zip` provides six live TMDb Helper source reads, a movie/TV interleaved adapter, a See All-first launcher using Kodi's native directory view, one-confirmation Home apply, verified byte-exact backup and conflict-safe restore. This differs from the existing custom Lazy Wall; Xbox mixed-feed styling, item navigation, account identity, and generator refresh remain **unverified**. The other hubs and the Continue Watching widget object are never rebuilt.\n
