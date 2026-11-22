@@ -1,28 +1,35 @@
-# TV Streaming — Kodi Repository
+# TV Streaming — Kodi add-ons for the Cricky profile
 
-Source: https://rickirl91.github.io/tv-streaming-kodi/
+**[Installers and status](https://rickirl91.github.io/tv-streaming-kodi/)** · **[Archive](https://rickirl91.github.io/tv-streaming-kodi/archive/)**
 
-## v0.2.3 — Optional TMDb Movies playback-link setup
+This project builds the shared **Cricky** streaming experience on Xbox Kodi with Arctic Fuse 3, TMDb Helper, StreamRow's See All-first home widgets, and Lazy Wall's continuous poster browsing.
 
-- TMDb Movies playback confirmed directly in Xbox Kodi by user. Other tested add-ons have not produced working playback.
-- New *optional* action **Connect TMDb Movies Playback** is in TV Streaming Catalogue & Preset main menu.
-- Adds a single validated JSON player mapping for movies and episodes to the active profile's TMDb Helper `players` folder only after confirmation.
-- Based on upstream TMDb Movies `tmdb_resolve` endpoints from Angelitto; adapts title placeholders to TMDb Helper's documented keys and encodings.
-- Verifies TMDb Helper and TMDb Movies are installed; blocks common Kids profile names; backs up pre-existing same-name file; verifies the write and attempts rollback on failure.
-- **Does not** change default movie/episode player settings. Users set default via TMDb Helper > Configure > Players. Restart Kodi if player not listed.
-- **Does not** modify any navigation, widget, skin, Trakt, source, or playback provider settings. All v0.2.2 Arctic Fuse 3 navigation JSON files are byte-identical.
-- Installation and integrated playback remain to be tested on Xbox; no claims of successful TMDb Helper handoff yet.
+## Current installers (direct ZIP)
 
-### Xbox setup
+| Component | Current ZIP | Purpose |
+| --- | --- | --- |
+| Lazy Wall | `script.tvstreaming.lazywall-0.3.1-RC.zip` | Poster wall, paging, details, playback and trailers |
+| StreamRow | `plugin.video.streamrow-0.3.0-RC.zip` | Skin-friendly See All launcher and category widgets |
+| Bulk Setup | `script.tvstreaming.bulksetup-0.1.0-RC.zip` | One-time safe migration of supported homepage catalogue rows |
+| Catalogue & Preset | `plugin.video.tvstreaming.catalogue-0.2.3.zip` | Original navigation preset and optional playback link |
 
-1. Install `plugin.video.tvstreaming.catalogue-0.2.3.zip` from existing `rickirl91` Kodi source.
-2. Open Video add-ons > TV Streaming Catalogue & Preset > Connect TMDb Movies Playback (optional).
-3. Select Install player link in adult Kodi profile (TMDb Movies already installed).
-4. In TMDb Helper > Configure > Players, choose TMDb Movies (TV Streaming) as movie and episode default if it appears, or choose it from Play With dialog first.
-5. Test a permitted film and a TV episode from our current Arctic Fuse 3 lists. A Kodi restart may be necessary.
+Install through Kodi **Settings → Add-ons → Install from zip file → rickirl91**. Once Bulk Setup has been applied successfully, **do not rerun it** just because Lazy Wall is updated.
 
-### Navigation base retained from v0.2.2
+## Verified and outstanding
 
-Home; Streaming Services paired provider movies/series; Movies; TV Shows; Documentaries; upcoming episodes calendar; Search. Other profiles are not changed by the playback-link action.
+- Xbox: Action Movies and Netflix Movies now scroll beyond 20 titles on Lazy Wall 0.3.1 RC.
+- Xbox: TV Series expanded-wall pagination still requires a final check.
+- Earlier tests confirmed working poster-wall navigation, film details, Play, trailer viewing/return, the See All hero preview and Miami-style neutral poster.
+- Before declaring Cricky complete: confirm shared Trakt behaviour, representative TV episode playback, remaining provider/genre filters, and final backup. Personalised shared-history recommendations need finalisation.
+- No claims of production acceptance beyond tested paths.
 
-Previous version ZIPs are preserved for rollback.
+## Repository layout
+
+- Root: current direct-install ZIPs, selected rollback ZIPs, `index.html`, active release notes and repository metadata.
+- `zips/`: legacy Kodi repository package URLs — **not moved**.
+- `tools/` and `.github/workflows/`: reproducible v0.3.1 build tooling — retained.
+- `archive/releases/`: older superseded direct-install versions.
+- `archive/notes/`: historical readmes and release tests.
+- `addons.xml` and `addons.xml.md5`: existing Kodi repository metadata — unchanged in this housekeeping pass.
+
+The reorganisation changes **GitHub file locations only**. It does not change installed Xbox files or existing profiles and settings.
