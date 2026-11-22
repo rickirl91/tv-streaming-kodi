@@ -16,3 +16,5 @@ a856e76d15b3ba5651be1ae5e2c2065c900b9b7de2a83ca9824d49284d676291  zips/plugin.vi
 12e64c294ee3d1e0f58b3ac709fbc5527efe0039dc243391881a019f9f18a675  zips/repository.tvstreaming.catalogue/repository.tvstreaming.catalogue-1.0.0.zip
 dfd0859c2add11631dd7496e1bc0f13fb352459bbd31f2b96aaa4310347a11f8  plugin.video.streamrow-0.1.0.zip
 dfd0859c2add11631dd7496e1bc0f13fb352459bbd31f2b96aaa4310347a11f8  zips/plugin.video.streamrow/plugin.video.streamrow-0.1.0.zip
+63c2e259c41c2336d490cc46978a9cb8c88258876928333a56e46d2a3ec8fa25  script.tvstreaming.lazywall-0.1.0.zip
+63c2e259c41c2336d490cc46978a9cb8c88258876928333a56e46d2a3ec8fa25  zips/script.tvstreaming.lazywall/script.tvstreaming.lazywall-0.1.0.zip

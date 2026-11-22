@@ -45,4 +45,19 @@
         </assets>
     </extension>
 </addon>
+  <addon id="script.tvstreaming.lazywall" name="TV Streaming Lazy Wall (EXPERIMENT)" version="0.1.0" provider-name="TV Streaming Project">
+    <requires>
+      <import addon="xbmc.python" version="3.0.0"/>
+      <import addon="plugin.video.themoviedb.helper" version="0.0.0"/>
+    </requires>
+    <extension point="xbmc.python.script" library="default.py">
+      <provides>executable</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+      <summary lang="en_GB">Tests scroll-triggered movie-poster fetching without page tiles.</summary>
+      <description lang="en_GB">Standalone Action Movies lazy-wall prototype for Arctic Fuse 3. Does not change installed widgets, skin, Trakt or playback settings. This version tests limited incremental loading and basic movie-detail navigation.</description>
+      <platform>all</platform>
+      <license>MIT</license>
+    </extension>
+  </addon>
 </addons>
