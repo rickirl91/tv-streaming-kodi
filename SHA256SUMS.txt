@@ -24,3 +24,5 @@ dfd0859c2add11631dd7496e1bc0f13fb352459bbd31f2b96aaa4310347a11f8  zips/plugin.vi
 54b3c2bdd4678b57f9c3df069de4fef863e28a9321c0bbd0c55907ef7079fb32  zips/script.tvstreaming.lazywall/script.tvstreaming.lazywall-0.1.2.zip
 831595e2f8ece69efbfe2062742205616f42b3d8ff9d7778d1b9cf7d524f6914  script.tvstreaming.lazywall-0.1.3.zip
 831595e2f8ece69efbfe2062742205616f42b3d8ff9d7778d1b9cf7d524f6914  zips/script.tvstreaming.lazywall/script.tvstreaming.lazywall-0.1.3.zip
+af9b0e2038e8119ca9d43e3d96fe52578753aade0622620ec9cd17101dfd4ec8  script.tvstreaming.lazywall-0.1.4.zip
+af9b0e2038e8119ca9d43e3d96fe52578753aade0622620ec9cd17101dfd4ec8  zips/script.tvstreaming.lazywall/script.tvstreaming.lazywall-0.1.4.zip
