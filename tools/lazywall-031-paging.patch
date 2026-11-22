@@ -1,0 +1,108 @@
+--- a/default.py
++++ b/default.py
+@@ -148,6 +148,32 @@
+         'params': {'file': url, 'media': 'video', 'properties': ['art', 'title', 'plot', 'year', 'rating', 'runtime', 'thumbnail', 'fanart', 'dateadded', 'uniqueid']}}
+     return jsonrpc('Files.GetDirectory', params)['files'] if isinstance(jsonrpc('Files.GetDirectory', params), dict) else []
+ 
++def with_source_page(source_url, page):
++    """Make a TMDb Helper source pageable instead of retaining widget-only limits."""
++    parsed = urlparse(source_url or '')
++    if parsed.scheme != 'plugin' or parsed.netloc != 'plugin.video.themoviedb.helper':
++        return ''
++    query = parse_qs(parsed.query, keep_blank_values=True)
++    # Existing homepage widgets can be explicitly single-page and/or use
++    # cacheonly mode. Both prevent normal exploration beyond their first page.
++    query.pop('nextpage', None)
++    query.pop('cacheonly', None)
++    query.pop('length', None)
++    query.pop('limit', None)
++    query['widget'] = ['false']
++    query['page'] = [str(max(1, int(page)))]
++    return parsed._replace(query=urlencode(query, doseq=True)).geturl()
++
++
++def get_source_page_url(entry):
++    """Follow the real TMDb Helper next-page directory where available."""
++    if not isinstance(entry, dict):
++        return ''
++    label = str(entry.get('label') or entry.get('title') or '').strip().lower()
++    url = str(entry.get('file') or '')
++    if not url.startswith('plugin://plugin.video.themoviedb.helper/'):
++        return ''
++    if ('next page' in label or 'nextpage' in label or label.startswith('next ')):
++        return url
++    return ''
++
+ 
+ def get_remote_items(url):
+@@ -183,11 +209,13 @@
+     if not url:
+         return []
+     try:
+-        if isinstance(url, str) and 'widget=' in url:
+-            url = url.replace('widget=true', 'widget=false')
+-        return get_remote_items(url)
++        if isinstance(url, str) and url.startswith('plugin://plugin.video.themoviedb.helper/'):
++            url = with_source_page(url, 1)
++        raw = get_remote_items(url)
++        return [r for r in raw if isinstance(r, dict) and not get_source_page_url(r)]
+     except Exception as exc:
+         log('SOURCE URL: ' + repr(exc), xbmc.LOGWARNING)
+         return []
+@@ -228,6 +256,8 @@
+     def __init__(self, title, source_url=''):
+         self.title = title
+         self.source_url = source_url
++        self.source_next_url = ''
++        self.source_seen_urls = set()
+         self.page = 0
+         self.items = []
+         self.has_more = True
+@@ -271,24 +301,52 @@
+         return new_items
+ 
+     def fetch_source_batch(self, page):
+-        source_url = self.source_url
+-        source_url = source_url.replace('widget=true', 'widget=false')
+-        if 'page=' in source_url:
+-            source_url = re.sub(r'([?&])page=\\d+', r'\\1page={}'.format(page), source_url)
+-        else:
+-            source_url += ('&' if '?' in source_url else '?') + 'page={}'.format(page)
+-        raw = get_remote_items(source_url)
++        # TMDb Helper directories are not all driven by the same synthetic
++        # &page=N path. In particular Discover/provider lists can advertise
++        # their next page as a directory item. Follow that exact item path.
++        if self.source_next_url:
++            source_url = self.source_next_url
++        else:
++            source_url = with_source_page(self.source_url, page)
++        if not source_url or source_url in self.source_seen_urls:
++            self.has_more = False
++            return []
++        self.source_seen_urls.add(source_url)
++        raw = get_remote_items(source_url)
++        next_url = ''
+         out = []
+         for entry in raw:
+             if not isinstance(entry, dict):
+                 continue
++            if get_source_page_url(entry):
++                next_url = get_source_page_url(entry)
++                continue
+             movie = self.normalize_source_entry(entry)
+             if not movie:
+                 continue
+             if movie['tmdb_id'] not in self.seen:
+                 out.append(movie)
+-        if not out:
++        if next_url and next_url not in self.source_seen_urls:
++            self.source_next_url = next_url
++        else:
++            self.source_next_url = ''
++        # Some providers hide the next-page folder in widget mode. If the
++        # native listing returned a complete 20-item page, try the explicit
++        # next page before concluding the source has ended.
++        full_page = len(raw) >= PAGE_SIZE
++        if not next_url and (not full_page or not out):
+             self.has_more = False
+         return out
