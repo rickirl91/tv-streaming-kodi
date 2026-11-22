@@ -1,26 +1,18 @@
-# TV Streaming Lazy Wall — v0.1.1 (Xbox experiment)
+# TV Streaming Lazy Wall — v0.1.2 (Xbox experimental)
 
-**v0.1.1 startup fix:** Uses Kodi's supported `xbmc.getSkinDir()` API rather than `Skin.CurrentSkin`, which was incorrectly displayed literally and blocked Arctic Fuse 3.5.7. The lazy-wall operation remains unverified on Xbox.
+The user’s video of v0.1.1 proved the catalogue counter advanced from **20 to 39** posters while the wall itself stayed blank. The catalogue requests worked; the custom panel failed to render the items.
 
-A standalone experimental Kodi **Program add-on** to test progressively appending TMDb Helper Action Movies posters while navigating a single custom wall.
+**v0.1.2 rendering fix:** Uses a non-media WindowXML and explicitly populates custom panel control ID 100 with `ControlList.addItems`, instead of populating the built-in media-window list. Adds a title label to the focused item as a visual diagnostic fallback. The scroll prefetch, 160-title safety cap and source TMDb Helper paths are unchanged.
 
-## Install using your existing Xbox Kodi source
+### Install on Xbox
 
-1. Kodi > Settings > Add-ons > Install from zip file > **rickirl91**.
-2. Select **script.tvstreaming.lazywall-0.1.1.zip**.
-3. Open **Add-ons > Program add-ons > TV Streaming Lazy Wall (EXPERIMENT)**.
-4. Scroll downward and check that additional posters appear without a blue Next Page tile.
+1. **Settings → Add-ons → Install from zip file → rickirl91**.
+2. Select **script.tvstreaming.lazywall-0.1.2.zip**.
+3. Open **Program add-ons → TV Streaming Lazy Wall (EXPERIMENT)**.
+4. Check that posters appear, move the selection, and scroll down to see whether the counter advances past 39 without a Next Page tile.
 
-An alternative route after the repository updates is **Install from repository > TV Streaming Repository > Program add-ons**.
+This build **does not** replace the working StreamRow first-tile widget, Cricky homepage, Arctic Fuse 3, playback providers, Trakt or profiles. It is not proven on Xbox until the user tests this version. Back-to-position and full skin inheritance are not implemented.
 
-## Safety and limitations
+Prior releases v0.1.0 and v0.1.1 remain available for rollback.
 
-- Does **not** replace the existing working StreamRow See All tile, Kodi homepage widgets, playback players, TMDb Helper settings, profiles or Trakt.
-- Experimental cap: **160 posters**. Back from movie details does not yet restore scroll position.
-- The custom wall is inspired by the Arctic Fuse look but is not its native view. Its focus colour reads the active skin string.
-- Kodi/Xbox behaviour has **not yet been validated**. The preview must pass on Xbox before it is integrated into the See All entry.
-- The add-on requests its batches while the window is open and stores no account credentials.
-
-v0.1.1 package ZIP SHA-256: `264b806ac6e2c200c271b1f3e7107dbf14a6efef5dd60bbfdb76874303908f3f`.
-
-Previous v0.1.0 package remains on the source for rollback.
+ZIP SHA-256: `54b3c2bdd4678b57f9c3df069de4fef863e28a9321c0bbd0c55907ef7079fb32`.
