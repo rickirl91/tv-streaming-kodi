@@ -1,0 +1,27 @@
+name: Publish Lazy Wall v0.3.1 RC pagination fix
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/publish-lazywall-031.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Build and validate opt-in Kodi ZIP
+        run: python3 tools/build-lazywall-031.py
+      - name: Commit ZIP, checksum and installer listing
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add script.tvstreaming.lazywall-0.3.1-RC.zip zips/script.tvstreaming.lazywall/script.tvstreaming.lazywall-0.3.1-RC.zip SHA256SUMS.txt index.html TV_STREAMING_RC_031_ACCEPTANCE.md
+          git diff --cached --quiet && exit 0
+          git commit -m "Publish Lazy Wall 0.3.1 RC with multi-source next-page handling"
+          git push origin HEAD:main
