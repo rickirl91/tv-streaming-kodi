@@ -47,4 +47,5 @@ baddd054a0bfceae28ee38c8decbb01a59c24efa4a1d5b7611c4a1e7c910cbd3  zips/plugin.vi
 605d0f42cd73d2ca29eb64fd7f050c9fddacaad6487a4e599754d8f492e33dd6  script.tvstreaming.lazywall-0.3.1-RC.zip
 605d0f42cd73d2ca29eb64fd7f050c9fddacaad6487a4e599754d8f492e33dd6  zips/script.tvstreaming.lazywall/script.tvstreaming.lazywall-0.3.1-RC.zip\n8e3994fe49e66591f69115fde572ecce00de18c406720e4832ca639bfd94e1bf  archive/releases/plugin.video.tvstreaming.homepersonalisation-0.1.0-RC.zip\n
 c30b8e0ed33446d7147b158903f8917ff100b369c03526df7928a3002552d72a  archive/releases/plugin.video.tvstreaming.homepersonalisation-0.1.1-RC.zip
-87a04551a433fb73219d066bf9a3b35f5bfdf82c3b862319aebc842649ebd0f4  plugin.video.tvstreaming.homepersonalisation-0.1.2-RC.zip
+87a04551a433fb73219d066bf9a3b35f5bfdf82c3b862319aebc842649ebd0f4  archive/releases/plugin.video.tvstreaming.homepersonalisation-0.1.2-RC.zip
+999bbccbe04147d9f37f48dfbde20fd24ec0366a88da87de30855c429ac78b5f  plugin.video.tvstreaming.homepersonalisation-0.1.3-RC.zip

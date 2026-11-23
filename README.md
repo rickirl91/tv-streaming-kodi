@@ -8,7 +8,7 @@ This project builds the shared **Cricky** streaming experience on Xbox Kodi with
 
 | Component | Current ZIP | Purpose |
 | --- | --- | --- |
-| Home Personalisation (RC) | `plugin.video.tvstreaming.homepersonalisation-0.1.2-RC.zip` | Three live mixed film/TV rows; corrected neutral horizontal See All tile, optional cleanup, safe backup |
+| Home Personalisation (RC) | `plugin.video.tvstreaming.homepersonalisation-0.1.3-RC.zip` | Three live mixed film/TV rows; standard narrow Poster tiles, corrected See All art, optional cleanup, safe backup |
 | Lazy Wall | `script.tvstreaming.lazywall-0.3.1-RC.zip` | Poster wall, paging, details, playback and trailers |
 | StreamRow | `plugin.video.streamrow-0.3.0-RC.zip` | Skin-friendly See All launcher and category widgets |
 | Bulk Setup | `script.tvstreaming.bulksetup-0.1.0-RC.zip` | One-time safe migration of supported homepage catalogue rows |
@@ -50,3 +50,12 @@ The reorganisation changes **GitHub file locations only**. It does not change in
 - v0.1.2 sets `landscape` and `override_landscape` to the installed StreamRow neutral artwork, while preserving source `fanart` for the Home hero preview. It does **not** edit widgets, feed logic, Trakt, playback, or cleanup.
 - Upgrade just this add-on in Cricky; fully restart Kodi. Verify all three personalised See All tiles and compare with working catalogue rows. **Xbox verification pending.**
 - Source, deterministic builder and regression tests: `src/homepersonalisation/`, `tools/build-homepersonalisation-012.py`, `tests/test_home_personalisation_v012.py`.
+
+## v0.1.3 RC — Match standard Home tile dimensions
+
+- Xbox video showed the **three personalised mixed film/TV Home rows** as wide Landscape tiles; the other film/TV catalogue rows use narrow Poster tiles.
+- This is a **skin widget style** issue, not a TMDb Helper or Trakt feed issue. Arctic Fuse 3's `shortcuts/generator/data/setup/widgets_include_row.xml` chooses `List_Poster_Row` when `widget_style=Poster` and defaults to `List_Landscape_Row` for missing styles. The original personalised Home widgets did not set `widget_style`.
+- v0.1.3 adds explicit Poster style for future new Home rows, plus separate **8. Preview standard Poster tile style** and **9. Apply standard Poster tile style** for existing Cricky installations. It checks the exact three Home paths and ordering, backs up the original Home widget file, changes only those three style properties and regenerates skin widgets.
+- **Installing alone does not edit Home**. After installing, run #8 and #9 in Cricky, then fully restart Kodi. Do not rerun Bulk Setup or the original Home personalisation.
+- Mixed movie/TV source feeds, artwork/backdrops, playback, watchlists, other Home rows, duplicate-row cleanup and other Kodi profiles are unchanged. **Xbox v0.1.3 tile dimensions still need confirmation.**
+- [Test guide](TV_STREAMING_RC_043_POSTER_STYLE.md).

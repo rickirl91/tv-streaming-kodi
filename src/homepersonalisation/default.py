@@ -397,6 +397,46 @@ def cleanup_duplicates():
               'Fully restart Kodi to refresh the Home screen.')
 
 
+def preview_poster_style():
+    _, _, old, _ = home_snapshot()
+    candidates = core.poster_style_candidates(old)
+    if not candidates:
+        DIALOG.ok('Cricky poster rows', 'All three personalised rows already have Poster style. No change needed.')
+        return
+    lines = ['The following personalised Home rows will use the SAME narrow Poster layout as other catalogue rows:', '']
+    for index, row in candidates:
+        lines.append('{}. {}: {} -> Poster'.format(index + 1, row['label'],
+                         row.get('widget_style') or '(unspecified - Landscape fallback)'))
+    lines.extend(['', 'Only these widget_style values change. The exact Home file is backed up.',
+                  'Continue Watching, all existing rows, mixed Trakt feeds, artwork and playback are otherwise preserved.'])
+    DIALOG.textviewer('Preview Poster tile style - no changes', '\n'.join(lines))
+
+
+def apply_poster_style():
+    path, raw, old, _ = home_snapshot()
+    candidates = core.poster_style_candidates(old)
+    if not candidates:
+        DIALOG.ok('Cricky poster rows', 'Personalised rows already use Poster style. Nothing changed.')
+        return
+    description = '\n'.join('{}. {} ({}) -> Poster'.format(i + 1, row['label'],
+                         row.get('widget_style') or 'default Landscape') for i, row in candidates)
+    DIALOG.textviewer('Poster tile correction - preview only',
+                      'Only the following Home widget style properties will change:\n\n' +
+                      description + '\n\nNo title feeds, Trakt data, playback callbacks, or other rows change.')
+    if not DIALOG.yesno('Use standard Poster tiles?',
+                        'Back up the exact Cricky Home widget file and change ONLY the {} personalised widget styles to Poster?'.format(len(candidates))):
+        return
+    verify_cricky()
+    folder = core.apply_home(path, backups_path(), core.sha256(raw),
+                             current_profile(), planner=core.plan_poster_style)
+    if folder is None:
+        DIALOG.ok('Cricky poster rows', 'No change needed.')
+        return
+    xbmc.executebuiltin('RunScript(script.skinvariables,template=special://skin/shortcuts/skinvariables-generator.json)')
+    DIALOG.ok('Cricky poster rows', 'Saved and backed up. Fully quit and restart Kodi.\n'
+              'The three personalised Home sections should now have standard narrow Poster tiles.')
+
+
 def handle_action(action):
     if action == 'inspect':
         inspect_only()
@@ -414,6 +454,10 @@ def handle_action(action):
         preview_cleanup()
     elif action == 'cleanup':
         cleanup_duplicates()
+    elif action == 'poster_preview':
+        preview_poster_style()
+    elif action == 'poster_apply':
+        apply_poster_style()
     else:
         raise ValueError('Unknown action')
 
@@ -428,6 +472,8 @@ def list_menu(handle):
             ('5. Preview redundant-row cleanup (read-only)', 'cleanup_preview', 'Show exactly which duplicate rows would be removed.'),
             ('6. Remove redundant Home rows (one confirmation)', 'cleanup', 'Backs up Cricky Home before removing the four older overlapping rows.'),
             ('7. Restore latest automatic backup', 'restore', 'Only if no newer Home edits exist.'),
+            ('8. Preview standard Poster tile style (read-only)', 'poster_preview', 'Check the 3 personalised rows before changing their size.'),
+            ('9. Apply standard Poster tile style (one confirmation)', 'poster_apply', 'Back up and match the smaller tiles of the catalogue rows.'),
     ):
         add_folder(handle, label,
                    'plugin://{}/?{}'.format(core.ADDON_ID, urlencode({'action': action})),

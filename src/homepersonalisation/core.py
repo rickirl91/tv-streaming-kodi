@@ -69,6 +69,7 @@ def plan_home(original):
         'icon': '',
         'path': widget_path(kind),
         'target': 'videos',
+        'widget_style': 'Poster',
     } for kind, label, _ in LABELS]
     result = [progress_row] + new_rows + remaining
     assert len(result) == len(remaining) + 4
@@ -108,6 +109,27 @@ def plan_cleanup(original):
     """Keep all objects byte-for-byte semantically, except exact obsolete rows."""
     drop = {index for index, _ in cleanup_candidates(original)}
     return [row for index, row in enumerate(original) if index not in drop]
+
+
+def poster_style_candidates(original):
+    """Select just the three active Cricky mixed-feed rows needing Poster style.
+
+    The existing exact-path + first-four validation used by cleanup ensures
+    no similarly named unrelated widgets or other hubs can be modified.
+    """
+    cleanup_candidates(original)  # Validates target profile Home layout.
+    return [(i, original[i]) for i in (1, 2, 3)
+            if original[i].get('widget_style') != 'Poster']
+
+
+def plan_poster_style(original):
+    """Preserve every Home row and field except three target style properties."""
+    candidates = poster_style_candidates(original)
+    result = list(original)
+    for i, row in candidates:
+        result[i] = dict(row)
+        result[i]['widget_style'] = 'Poster'
+    return result
 
 
 def load_home(raw):

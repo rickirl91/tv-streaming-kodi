@@ -53,3 +53,13 @@ artwork, widget navigation and Trakt provider identity remain to verify.
 Set neutral Miami art as explicit landscape and override_landscape; preserve title fanart for Home hero.
 This release does not change Home widget files, Trakt endpoints, navigation, playback, or cleanup logic.
 Fully restart Kodi after installing, and check three new Home See All tiles.
+
+v0.1.3 RC: Arctic Fuse 3 uses each Home widget's widget_style to choose the
+row layout. The three personalised Home rows lacked widget_style and defaulted
+to wider Landscape cards. Their correct matching style is widget_style=Poster.
+New actions 8 Preview Poster tile style and 9 Apply Poster tile style update
+ONLY those three rows with a separate one-confirmation, verified byte-exact
+backup and conflict-safe restore. No change from installing the add-on alone.
+Do NOT use Apply Home Personalisation or rerun Bulk Setup for this update.
+After applying the poster style, fully quit/restart Kodi. Existing neutral
+See All art (0.1.2), the large hero backdrop and playback are retained.
