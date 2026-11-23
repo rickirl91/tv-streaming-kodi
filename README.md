@@ -8,7 +8,7 @@ This project builds the shared **Cricky** streaming experience on Xbox Kodi with
 
 | Component | Current ZIP | Purpose |
 | --- | --- | --- |
-| Home Personalisation (RC) | `plugin.video.tvstreaming.homepersonalisation-0.1.1-RC.zip` | Three mixed film/TV rows; standard See All artwork and optional duplicate-row cleanup, with preview/backup |
+| Home Personalisation (RC) | `plugin.video.tvstreaming.homepersonalisation-0.1.2-RC.zip` | Three live mixed film/TV rows; corrected neutral horizontal See All tile, optional cleanup, safe backup |
 | Lazy Wall | `script.tvstreaming.lazywall-0.3.1-RC.zip` | Poster wall, paging, details, playback and trailers |
 | StreamRow | `plugin.video.streamrow-0.3.0-RC.zip` | Skin-friendly See All launcher and category widgets |
 | Bulk Setup | `script.tvstreaming.bulksetup-0.1.0-RC.zip` | One-time safe migration of supported homepage catalogue rows |
@@ -42,3 +42,11 @@ The reorganisation changes **GitHub file locations only**. It does not change in
 - New separate **Preview redundant-row cleanup** and **Remove redundant Home rows** actions, exactly four older overlapping label families only; retain Up Next Episodes and all other rows. Requires an explicit confirmation and makes a new byte-exact SHA-256 backup.
 - The four older rows only disappear **after** selecting cleanup in Cricky. Do **not** rerun legacy Bulk Setup or reinstall Lazy Wall.
 - [Release test guide](TV_STREAMING_RC_041_POLISH.md).
+
+## v0.1.2 RC: Arctic Fuse 3 See All landscape artwork
+
+- Initial Xbox report after v0.1.1: the See All tile in **Because You Watched** still displayed **Get Fast** background rather than the neutral Miami image.
+- Root cause confirmed against Arctic Fuse 3's `Image_Landscape` precedence: `fanart` was selected for horizontal tiles because v0.1.1 did not set `landscape` (even though `poster` and `thumb` were neutral).
+- v0.1.2 sets `landscape` and `override_landscape` to the installed StreamRow neutral artwork, while preserving source `fanart` for the Home hero preview. It does **not** edit widgets, feed logic, Trakt, playback, or cleanup.
+- Upgrade just this add-on in Cricky; fully restart Kodi. Verify all three personalised See All tiles and compare with working catalogue rows. **Xbox verification pending.**
+- Source, deterministic builder and regression tests: `src/homepersonalisation/`, `tools/build-homepersonalisation-012.py`, `tests/test_home_personalisation_v012.py`.

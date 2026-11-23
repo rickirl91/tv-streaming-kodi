@@ -46,4 +46,4 @@ For the two adults, match Cricky's working UI, artwork, Lazy Wall/See All, sourc
 - **No implementation/deployment of these additional profiles has occurred yet.**
 
 ## Immediate Xbox checkpoint
-Upgrade **Home Personalisation v0.1.1 RC** while in Cricky; verify neutral See All artwork in three mixed rows; preview duplicate cleanup and confirm only the four redundant old watchlist/recommendation rows; run cleanup with separate confirmation; restart; verify remaining row order and See All behaviour; confirm Family Trakt in TMDb Helper; final Cricky backup. Do **not** rerun legacy Bulk Setup.
+Upgrade **Home Personalisation v0.1.2 RC** while in Cricky; verify the corrected neutral horizontal See All artwork in three mixed rows (v0.1.1 still showed first-title backdrop on the tile); preview duplicate cleanup and confirm only the four redundant old watchlist/recommendation rows; run cleanup with separate confirmation; restart; verify remaining row order and See All behaviour; confirm Family Trakt in TMDb Helper; final Cricky backup. Do **not** rerun legacy Bulk Setup.

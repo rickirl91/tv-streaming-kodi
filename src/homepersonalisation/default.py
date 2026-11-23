@@ -163,10 +163,13 @@ def feed_link(kind, mode='widget', nexts=None):
     return 'plugin://{}/?{}'.format(core.ADDON_ID, urlencode(query))
 
 
-def add_folder(handle, label, url, art=None, plot=''):
+def add_folder(handle, label, url, art=None, plot='', properties=None):
     item = xbmcgui.ListItem(label=label)
     if art:
         item.setArt(art)
+    if properties:
+        for key, value in properties.items():
+            item.setProperty(key, value)
     item.setInfo('video', {'title': label, 'plot': plot})
     xbmcplugin.addDirectoryItem(handle, url, item, isFolder=True)
 
@@ -251,7 +254,13 @@ def handle_feed(handle, query):
         # borrow its poster. The first tile must show the existing StreamRow
         # neutral SEE ALL image just like the established catalogue widgets.
         artwork = neutral_see_all_art()
-        picture = {'poster': artwork, 'thumb': artwork, 'icon': artwork}
+        # Arctic Fuse 3's Image_Landscape prioritises landscape artwork,
+        # then falls back to fanart BEFORE poster/thumb. See All must set
+        # landscape explicitly, or it incorrectly displays the first title's
+        # programme backdrop as the horizontal tile image.
+        # The override property also works if users disable landscape art.
+        picture = {'poster': artwork, 'thumb': artwork, 'icon': artwork,
+                   'landscape': artwork}
         if combined:
             entry = combined[0][1]
             art = entry.get('art') or {}
@@ -259,10 +268,12 @@ def handle_feed(handle, query):
                 art = {}
             fanart = art.get('fanart') or entry.get('fanart')
             if fanart:
+                # Keep the original first-title fanart for the large Home hero.
                 picture['fanart'] = fanart
         add_folder(handle, 'See All - ' + core.LABEL_BY_KIND[kind],
                    feed_link(kind, 'all'), picture,
-                   'Browse movies and TV series together. Follow Next Page to load additional titles.')
+                   'Browse movies and TV series together. Follow Next Page to load additional titles.',
+                   properties={'override_landscape': artwork})
     for media, entry in combined:
         show_movie_tv_item(handle, media, entry)
     if nexts.get('movie') or nexts.get('tv'):

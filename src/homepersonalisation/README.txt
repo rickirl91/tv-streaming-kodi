@@ -48,3 +48,8 @@ artwork, widget navigation and Trakt provider identity remain to verify.
 - Does not delete Up Next Episodes, existing unrelated rows or Trakt data.
 - Installing this update alone DOES NOT modify Home widgets. Run menu action 6
   only after viewing the preview in action 5.
+
+0.1.2 RC: Fix AF3 horizontal See All tile using title fanart despite 0.1.1 poster correction.
+Set neutral Miami art as explicit landscape and override_landscape; preserve title fanart for Home hero.
+This release does not change Home widget files, Trakt endpoints, navigation, playback, or cleanup logic.
+Fully restart Kodi after installing, and check three new Home See All tiles.
