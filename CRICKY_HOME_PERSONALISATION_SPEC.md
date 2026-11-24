@@ -54,3 +54,11 @@ The Xbox photo showed the first film backdrop **Get Fast** on the **See All - Be
 ## v0.1.3 RC: exact standard Poster row style (23 November 2026)
 
 Xbox video revealed that the three personalised rows use wider Landscape cards, including the See All first tile, unlike the narrow Poster cards in standard movie and TV catalogue rows. Root cause: new rows were written without `widget_style`; upstream Arctic Fuse 3 `shortcuts/generator/data/setup/widgets_include_row.xml` defaults a missing style to `List_Landscape_Row`. A `widget_style` of `Poster` selects `List_Poster_Row`. v0.1.3 applies this property to new rows and adds a **separate preview/confirm correction** for the three existing mixed rows only, using exact path and first-four label checks. All other widget fields, sources, positions, settings, profiles, and previous See All artwork are preserved. Uses existing verified byte-for-byte backup and change-conflict refusal; requires a full Kodi restart. Eight offline tests pass; Xbox confirmation pending.
+
+## Approved hero text behaviour (24 Nov 2026; pending implementation)
+
+When focus is on the **See All** tile at the start of a personalised Home row, the large hero **heading must be the clean category label** — precisely **Recommended For You**, **Because You Watched**, or **From Your Watchlist**. It must **not** begin with `See All` and must **not** show the first film or TV programme's title. Use a short category-level description if a description is shown, not the generic See All navigation instruction or the first title's synopsis. The first recommendation's backdrop may remain as decorative hero artwork, as long as it does not cause its title to replace the category heading.
+
+When focus moves to an **actual film or TV title**, retain the normal title-specific hero information and working movie/TV navigation; this decision concerns **category-level See All focus** only. Keep the approved narrow `Poster` layout, neutral See All artwork, mixed Trakt feeds, progress widgets, backup/restore and profile isolation intact.
+
+**No code or Xbox settings have been changed for this hero-text decision yet.** Next step is to finish the existing v0.1.3 redundant-row cleanup (menu actions **5 Preview** and **6 Remove**), then deliver a separately tested hero-label update.
