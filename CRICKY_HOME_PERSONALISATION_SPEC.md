@@ -62,3 +62,17 @@ When focus is on the **See All** tile at the start of a personalised Home row, t
 When focus moves to an **actual film or TV title**, retain the normal title-specific hero information and working movie/TV navigation; this decision concerns **category-level See All focus** only. Keep the approved narrow `Poster` layout, neutral See All artwork, mixed Trakt feeds, progress widgets, backup/restore and profile isolation intact.
 
 **No code or Xbox settings have been changed for this hero-text decision yet.** Next step is to finish the existing v0.1.3 redundant-row cleanup (menu actions **5 Preview** and **6 Remove**), then deliver a separately tested hero-label update.
+
+## Superseding scope — category-name hero heading on ALL See All tiles (24 Nov 2026)
+
+**Approved requirement:** the category-only heading rule above applies to **every See All tile across the completed Cricky profile**, not only the three personalised Home rows. Include standard StreamRow catalogue widgets in Home, Movies, TV Shows, Documentaries, streaming-provider collections, genre sections, trending, new releases, and any other hub/row with a See All tile. Future adult and child profiles cloned from the approved master should inherit this consistent behaviour for their own allowed categories.
+
+**When a See All tile is focused:**
+- The large hero heading is the **exact clean category/row name** (e.g., `Trending Movies`, `Netflix Movies`, `Action Movies`, `Recommended For You`), never a `See All` prefix/suffix and never the first programme's title.
+- If a subtitle/description is displayed, it must be **category-level text**, not the first programme's plot and not generic internal pagination instructions. For categories without a suitable description, omit it rather than invent a title synopsis.
+- Preserve the agreed **neutral See All tile artwork**, current Poster widget styling, optional large cinematic fanart backdrop, existing See All destination and pagination.
+- As focus moves to an actual movie or series tile, restore that item's normal title, plot, badges and navigation. Do not globally replace content metadata or alter Trakt/playback paths.
+
+**Implementation / tests:** inspect both `plugin.video.streamrow` (existing catalogue See All widgets) and `plugin.video.tvstreaming.homepersonalisation` (three new mixed feeds), plus Arctic Fuse 3's hero metadata precedence. Fix **both** widget producers or an equivalent shared presentation layer; updating only Home Personalisation would leave old catalogue rows inconsistent. Use a separate versioned, reversible rollout and test a personalised Home row, a Trending row, a genre row, a streaming-provider row, and a TV series row, across Home and relevant hubs. Avoid touching native rows that do not have a See All tile.
+
+**Checkpoint:** user's next action is still the existing v0.1.3 **5 Preview redundant-row cleanup** then **6 Remove redundant Home rows**, followed by Kodi restart. **No hero-text changes have been deployed to Xbox yet.**
