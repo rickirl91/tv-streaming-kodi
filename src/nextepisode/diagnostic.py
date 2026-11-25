@@ -23,6 +23,9 @@ def snapshot():
 
 if __name__ == "__main__":
     try:
-        xbmcgui.Dialog().textviewer("TV Streaming playback diagnostic", snapshot())
+        current = snapshot()
+        if current == "No active video":
+            current = xbmcgui.Window(10000).getProperty("tvstreaming.nextdiagnostic") or current
+        xbmcgui.Dialog().textviewer("TV Streaming playback diagnostic", current)
     except Exception:
         xbmcgui.Dialog().ok("TV Streaming playback diagnostic", "Could not read playback metadata.")
