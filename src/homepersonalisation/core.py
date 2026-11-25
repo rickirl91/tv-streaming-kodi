@@ -252,3 +252,12 @@ def summary(original, proposed):
             'to your Family Trakt account; a login in another add-on is not proof.\n'
             'A full Kodi restart / SkinVariables widget rebuild may be required.') .format(
                 len(old_names), len(new_names), '\n'.join('{}. {}'.format(i + 1, name) for i, name in enumerate(new_names[:8])))
+
+
+def plan_hidden_gems(original):
+    """Rename only the exact legacy label, preserving all widget settings."""
+    if not isinstance(original, list) or not all(isinstance(row, dict) for row in original):
+        raise ValueError('Unsupported widget configuration')
+    return [dict(row, label='Hidden Gems')
+            if canonical_label(row.get('label')) == 'hidden gems (highly rated, less popular)'
+            else row for row in original]
