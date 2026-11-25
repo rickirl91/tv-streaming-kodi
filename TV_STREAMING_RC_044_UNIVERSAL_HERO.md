@@ -38,3 +38,12 @@ Previously the neutral See All tile borrowed the first programme's **title and s
 - Final verified portable Cricky profile backup.
 
 **The prior 8-row Home layout and completed cleanup are intentionally preserved.**
+
+## Automated release verification
+
+On 25 November 2026, [GitHub Actions regression run 45515749295](https://github.com/rickirl91/tv-streaming-kodi/actions/runs/45515749295) completed **SUCCESS**. All five tests passed: ZIP/source parity and syntax, category label normalisation, StreamRow hero behaviour, personalised hero behaviour and unchanged navigation anchors. The runner produced SHA-256 values:
+
+- StreamRow 0.3.1 RC: `63664b5062ea4ab8c0aff0b8184f646886807a42ca216c15b8b84ad3a6070bb7`
+- Home Personalisation 0.1.4 RC: `59a729f64475dcbc7488147f2ba285c2ddff076e3d8b7dff858bee2b6777d6a9`
+
+These checks do not replace Xbox visual acceptance. The package content is fixed at this checksum; avoid recreating ZIPs under the same filename.

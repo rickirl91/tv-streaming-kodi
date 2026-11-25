@@ -49,4 +49,5 @@ baddd054a0bfceae28ee38c8decbb01a59c24efa4a1d5b7611c4a1e7c910cbd3  zips/plugin.vi
 c30b8e0ed33446d7147b158903f8917ff100b369c03526df7928a3002552d72a  archive/releases/plugin.video.tvstreaming.homepersonalisation-0.1.1-RC.zip
 87a04551a433fb73219d066bf9a3b35f5bfdf82c3b862319aebc842649ebd0f4  archive/releases/plugin.video.tvstreaming.homepersonalisation-0.1.2-RC.zip
 999bbccbe04147d9f37f48dfbde20fd24ec0366a88da87de30855c429ac78b5f  archive/releases/plugin.video.tvstreaming.homepersonalisation-0.1.3-RC.zip
-# SHA-256 for plugin.video.streamrow-0.3.1-RC.zip and plugin.video.tvstreaming.homepersonalisation-0.1.4-RC.zip to be appended after package CI validation.
+63664b5062ea4ab8c0aff0b8184f646886807a42ca216c15b8b84ad3a6070bb7  plugin.video.streamrow-0.3.1-RC.zip
+59a729f64475dcbc7488147f2ba285c2ddff076e3d8b7dff858bee2b6777d6a9  plugin.video.tvstreaming.homepersonalisation-0.1.4-RC.zip

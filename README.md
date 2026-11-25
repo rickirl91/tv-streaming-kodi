@@ -68,4 +68,4 @@ Two add-on upgrades make the **large hero heading show the category name wheneve
 - **Home Personalisation 0.1.4 RC**: fixes the three mixed Trakt See All category headings.
 - Both are installed as **ZIP upgrades** using existing Kodi source **rickirl91**; **no Apply Home, Bulk Setup, profile migration or widget regeneration is required by the installers**. Fully quit/restart Kodi, then verify different hubs.
 - Exact old installers are retained in `archive/releases/`. Lazy Wall, Trakt, other hubs' raw configuration and all profile data are unchanged.
-- [Release guide](TV_STREAMING_RC_044_UNIVERSAL_HERO.md) and [offline regression tests](tests/test_universal_hero_044.py). **Xbox acceptance pending.**
+- [Release guide](TV_STREAMING_RC_044_UNIVERSAL_HERO.md) and [offline regression tests](tests/test_universal_hero_044.py). **All five GitHub Actions regression tests passed** on 25 November 2026; Xbox acceptance is still pending.
