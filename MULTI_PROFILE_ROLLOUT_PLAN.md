@@ -48,3 +48,15 @@ For the two adults, match Cricky's working UI, artwork, Lazy Wall/See All, sourc
 ## Immediate Xbox checkpoint
 
 Cricky's duplicate-row cleanup was confirmed working. Install **StreamRow v0.3.1 RC** and **Home Personalisation v0.1.4 RC** in Cricky to test **category-only hero headings on all See All tiles** across Home, Movies, TV Shows, streaming providers, genres and documentaries. Fully restart Kodi. No original Apply Home or legacy Bulk Setup run is needed. Then verify See All pagination/return, Family Trakt sync and final profile backup. The universal hero change remains **Xbox acceptance pending**. See `TV_STREAMING_RC_044_UNIVERSAL_HERO.md`.
+
+
+## Adult B (Christine) — dedicated Reality TV discovery (approved, pending profile build)
+
+Christine enjoys reality television. Clone the finished Cricky adult foundation, connect **only her personal Trakt account** across TMDb Helper sync and watched-progress integrations, and add a dedicated **Reality TV** Home row alongside existing shared adult catalogue and personalised rows. This is an addition to the Christine profile, **not** a change to Cricky, Ricky, Guest or children's profiles.
+
+- Place **Reality TV** near the top of Christine's non-personalised discovery sections, **after** Continue Watching and the three personalised Trakt rows.
+- Use the same accepted neutral See All artwork, narrow Poster-style tiles, category-only hero heading (**Reality TV** on See All focus), scrolling / full-wall navigation and title-specific metadata when a programme is selected.
+- Discovery can draw from reality TV genre/category feeds. Where practical, offer further categories such as **Dating & Relationships**, **Competition & Talent**, **Lifestyle & Makeovers** and **Reality Documentaries**; avoid assuming one broad feed captures every relevant title.
+- Let her dedicated Trakt account guide **Recommended For You** and **Because You Watched**, rather than hardcoding one taste across the whole profile. Reality TV should be discoverable even before significant watch history exists.
+- Filter duplicates between optional subcategory rows when practical, preserve normal series episode navigation and avoid disrupting playback and watched state.
+- **No implementation has occurred yet.** Validate actual catalogue coverage and providers when Christine's profile is built.
