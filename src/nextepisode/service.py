@@ -199,7 +199,7 @@ class Service:
             self.result = None
             if generation == self.generation and self.armed:
                 self.record_status(status)
-                if target or self.attempts >= 3:
+                if target or status == 'no_eligible_successor' or self.attempts >= 3:
                     self.adopt(identity, target)
                 else:
                     self.next_probe = now + 10
@@ -215,6 +215,7 @@ class Service:
             pass
         current = playback_identity(self.player)
         if not current or not self.file:
+            self.record_status('metadata_not_ready')
             return
         self.attempts += 1
         self.record_status('catalogue_pending')
@@ -223,10 +224,10 @@ class Service:
         self.worker.start()
         self.next_probe = math.inf
 
-    def record_status(self, status):
+    def record_status(self, status, section='resolution', **details):
         try:
             data = json.loads(self.diagnostic_window.getProperty('tvstreaming.nextdiagnostic') or '{}')
-            data['resolution'] = {'status': status, 'attempt': self.attempts}
+            data[section] = {'status': status, 'attempt': self.attempts, **details}
             self.diagnostic_window.setProperty('tvstreaming.nextdiagnostic', json.dumps(data))
         except Exception:
             pass
@@ -293,6 +294,7 @@ class Service:
             self.overlay = Overlay("NextEpisode.xml", self.path, "Default", "1080i")
             self.overlay.display(target, confirmation, remaining)
             self.overlay.show()
+            self.record_status("shown", "overlay")
         else:
             self.overlay.display(target, confirmation, remaining)
 
@@ -363,8 +365,10 @@ class Service:
                         and not xbmc.getCondVisibility("Player.Rewinding"))
         self.last_remaining = remaining if normal_speed and duration > 0 else None
         threshold = 120 if duration >= 1800 else 60
-        if not normal_speed or remaining > threshold or not xbmc.getCondVisibility(
-                "Window.IsVisible(fullscreenvideo)"):
+        fullscreen = xbmc.getCondVisibility("Window.IsVisible(fullscreenvideo)")
+        if remaining <= threshold:
+            self.record_status("threshold_reached", "playback", remaining=round(remaining), normal_speed=normal_speed, fullscreen=fullscreen, target_verified=bool(self.controller.target))
+        if not normal_speed or remaining > threshold or not fullscreen:
             self.close()
             return
         if self.choice(now, natural=False):
@@ -382,7 +386,8 @@ def run():
         while not monitor.abortRequested():
             try:
                 service.step(monotonic())
-            except Exception:
+            except Exception as exc:
+                service.record_status(type(exc).__name__, "service_error")
                 service.reset()
                 xbmc.log("[TV Streaming Next Episode] Playback state unavailable", xbmc.LOGWARNING)
             if monitor.waitForAbort(0.25):
