@@ -82,6 +82,8 @@ def verified_successor(fetch, current, report=lambda reason: None):
 
     index = numbers.index(season)
     raw = load(regular[index])
+    if raw is None:
+        return None
     if not raw or episode < 1 or episode > len(raw):
         return report("current_episode_missing")
     item = raw[episode - 1]
