@@ -55,8 +55,12 @@ def verified_successor(fetch, current, report=lambda reason: None):
     group = current.get("group")
     append = "external_ids,episode_groups" if group else "external_ids"
     show = fetch("tv", series, append_to_response=append)
-    if str(show.get("id")) != series or not same_title(current["show"], show, "name"):
-        return report("series_identity_mismatch")
+    if not isinstance(show, dict) or not show.get("id"):
+        return report("series_response_missing_id")
+    if str(show["id"]) != series:
+        return report("series_id_mismatch")
+    if not same_title(current["show"], show, "name"):
+        return report("series_title_mismatch")
     seasons = show.get("seasons")
     regular = sorted((row for row in seasons if row["season_number"] > 0),
                      key=lambda row: row["season_number"])
