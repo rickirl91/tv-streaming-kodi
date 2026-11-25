@@ -43,6 +43,24 @@ def snapshot():
 if __name__ == "__main__":
     try:
         current = xbmcgui.Window(10000).getProperty("tvstreaming.nextdiagnostic") or snapshot()
-        xbmcgui.Dialog().textviewer("TV Streaming playback diagnostic", current)
+        dialog = xbmcgui.Dialog()
+        if dialog.yesno("TV Streaming diagnostic", "Preview the overlay? No opens the playback report."):
+            if xbmc.Player().isPlaying():
+                dialog.ok("Preview", "Stop playback before previewing.")
+            else:
+                import xbmcaddon
+                from overlay import Overlay
+                preview = Overlay("NextEpisode.xml", xbmcaddon.Addon().getAddonInfo("path"), "Default", "1080i")
+                preview.display(dict(show="Preview only", season=1, episode=2, title="Sample next episode", art=""), False, 120)
+                preview.show()
+                try:
+                    monitor = xbmc.Monitor()
+                    for _ in range(60):
+                        if preview.choice is not None or monitor.waitForAbort(0.25):
+                            break
+                finally:
+                    preview.close()
+        else:
+            dialog.textviewer("TV Streaming playback diagnostic", current)
     except Exception:
         xbmcgui.Dialog().ok("TV Streaming playback diagnostic", "Could not read playback metadata.")
