@@ -76,7 +76,7 @@ class UniversalHeroTests(unittest.TestCase):
         self.assertEqual(self.home, (ROOT / "src/homepersonalisation/default.py").read_text(encoding="utf-8"))
         compile(self.stream, "streamrow/default.py", "exec")
         compile(self.home, "homepersonalisation/default.py", "exec")
-        self.assertTrue(self.stream_media.startswith(b"\\x89PNG\\r\\n\\x1a\\n"))
+        self.assertTrue(self.stream_media.startswith(b"\x89PNG\r\n\x1a\n"))
 
     def test_streamrow_title_normalisation(self):
         ns = {"re": re, "CATEGORIES": {"action": ("Action", "movie", 28)}}
