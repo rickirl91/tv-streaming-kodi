@@ -43,7 +43,7 @@ def playback_url(series, target, player):
     return "plugin://plugin.video.themoviedb.helper/?" + urlencode(params)
 
 
-def verified_successor(fetch, current):
+def verified_successor(fetch, current, report=lambda reason: None):
     """Use Helper's unpaginated TMDb detail endpoints and declared counts.
 
     Only the current season and the first following non-special season are
@@ -56,7 +56,7 @@ def verified_successor(fetch, current):
     append = "external_ids,episode_groups" if group else "external_ids"
     show = fetch("tv", series, append_to_response=append)
     if str(show.get("id")) != series or not same_title(current["show"], show, "name"):
-        return None
+        return report("series_identity_mismatch")
     seasons = show.get("seasons")
     regular = sorted((row for row in seasons if row["season_number"] > 0),
                      key=lambda row: row["season_number"])
@@ -64,7 +64,7 @@ def verified_successor(fetch, current):
     if (numbers != list(range(1, show["number_of_seasons"] + 1))
             or sum(row["episode_count"] for row in regular) != show["number_of_episodes"]
             or season not in numbers):
-        return None
+        return report("series_counts_or_season_mismatch")
 
     def load(summary):
         number = summary["season_number"]
@@ -77,43 +77,43 @@ def verified_successor(fetch, current):
                 or [r["episode_number"] for r in rows] != list(range(1, count + 1))
                 or len({r["id"] for r in rows if r.get("id")}) != count
                 or any(r.get("season_number") != number for r in rows)):
-            return None
+            return report("season_payload_incomplete")
         return rows
 
     index = numbers.index(season)
     raw = load(regular[index])
     if not raw or episode < 1 or episode > len(raw):
-        return None
+        return report("current_episode_missing")
     item = raw[episode - 1]
     if not same_title(current["title"], item, "name"):
-        return None
+        return report("episode_title_mismatch")
     # An unscoped TMDb tag is only a candidate parent ID. Check the IMDb
     # identifier against the show or this exact episode before trusting it.
     if not current.get("parent_verified"):
         imdb = current.get("imdb")
         if not imdb or not imdb.startswith("tt") or not imdb[2:].isdigit():
-            return None
+            return report("imdb_missing")
         if imdb != (show.get("external_ids") or {}).get("imdb_id"):
             detail = fetch("tv", series, "season", season, "episode", episode,
                            append_to_response="external_ids")
             if (item["id"] != detail.get("id")
                     or imdb != (detail.get("external_ids") or {}).get("imdb_id")):
-                return None
+                return report("imdb_mismatch")
 
     if group:
         declared = [row for row in (show.get("episode_groups") or {}).get("results", [])
                     if row.get("id") == group]
         if len(declared) != 1:
-            return None
+            return report("group_not_declared")
         raw = group_rows(fetch("tv", "episode_group", group), declared[0])
         if not raw or sum(row.get("id") == item["id"] and
                           (row.get("season_number"), row.get("episode_number")) == (season, episode)
                           for row in raw) != 1:
-            return None
+            return report("group_identity_mismatch")
     elif episode == len(raw) and index + 1 < len(regular):
         following = load(regular[index + 1])
         if not following:
-            return None
+            return report("following_season_incomplete")
         raw += following
 
     rows = []
@@ -130,7 +130,7 @@ def verified_successor(fetch, current):
     result = resolve_next(dict(current, episode_id=f"{series}:{season}:{episode}"),
                           dict(series_id=series, episodes=rows, complete=True),
                           grouped=bool(group))
-    return result if result and result["title"] else None
+    return result if result and result["title"] else report("no_eligible_successor")
 
 
 def group_rows(payload, summary):
