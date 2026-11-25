@@ -1,5 +1,6 @@
 """Cricky playback adapter. Kodi callbacks enqueue; the service owns decisions."""
 import math
+import json
 import re
 from collections import deque
 from threading import Lock, Thread
@@ -152,6 +153,7 @@ class Service:
         self.confirm_until = None
         self.last_remaining = None
         self.next_probe = 0
+        self.attempts = 0
         self.path = xbmcaddon.Addon(SERVICE).getAddonInfo("path")
         self.diagnostic_window = xbmcgui.Window(10000)
 
@@ -171,27 +173,35 @@ class Service:
         self.file = None
         self.ending = self.confirm_until = self.last_remaining = None
         self.next_probe = 0
+        self.attempts = 0
 
     def read_catalogue(self, generation, current, filename, order):
         target = None
+        status = 'player_or_order_rejected'
         try:
             group = current["group"] or ""
             if (validate_player(filename, order) and
                     (order == "default" and not group or
                      order == "group" and re.fullmatch(r"[A-Za-z0-9_-]{1,64}", group))):
                 target = resolve(current, filename)
-        except Exception:
+                status = 'successor_verified' if target else 'catalogue_rejected_or_no_successor'
+        except Exception as exc:
+            status = 'catalogue_exception:' + type(exc).__name__
             xbmc.log("[TV Streaming Next Episode] Catalogue or player unavailable", xbmc.LOGWARNING)
-        self.result = generation, current, target
+        self.result = generation, current, target, status
 
     def probe(self, now):
         if self.worker and self.worker.is_alive():
             return
         if self.result is not None:
-            generation, identity, target = self.result
+            generation, identity, target, status = self.result
             self.result = None
             if generation == self.generation and self.armed:
-                self.adopt(identity, target)
+                self.record_status(status)
+                if target or self.attempts >= 3:
+                    self.adopt(identity, target)
+                else:
+                    self.next_probe = now + 10
                 return
         if not self.armed or now < self.next_probe or not self.player.isPlayingVideo():
             return
@@ -205,10 +215,20 @@ class Service:
         current = playback_identity(self.player)
         if not current or not self.file:
             return
+        self.attempts += 1
+        self.record_status('catalogue_pending')
         self.worker = Thread(target=self.read_catalogue, daemon=True,
                              args=(self.generation, current, *self.route[1:]))
         self.worker.start()
         self.next_probe = math.inf
+
+    def record_status(self, status):
+        try:
+            data = json.loads(self.diagnostic_window.getProperty('tvstreaming.nextdiagnostic') or '{}')
+            data['resolution'] = {'status': status, 'attempt': self.attempts}
+            self.diagnostic_window.setProperty('tvstreaming.nextdiagnostic', json.dumps(data))
+        except Exception:
+            pass
 
     def adopt(self, identity, target):
         # Verify the actual successor AV start before retaining the streak.
