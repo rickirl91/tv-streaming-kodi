@@ -61,3 +61,24 @@ Christine enjoys reality television. Clone the finished Cricky adult foundation,
 - Use Christine's own Trakt history to shape her personal recommendations. The Reality TV hub must be usable for discovery even before substantial personal viewing history exists.
 - Keep changes profile-scoped and reversible, with an original-documentaries-navigation backup and no cross-account Trakt scrobbling.
 - **Design approved; no implementation or Xbox deployment yet.** Confirm working genre/provider feeds and catalogue coverage during Christine profile build.
+
+
+## Playback continuity and next-episode automation — Cricky acceptance gate (research, not deployed)
+
+The current Cricky playback path is **Arctic Fuse 3 → TMDb Helper → TMDb Movies**, with TMDb Movies selected as the automatic movie/episode player and source selection configured for a Windows 1080p profile. TMDb Helper is authenticated to the shared Family Trakt account. The custom StreamRow and Lazy Wall do not manage resume positions.
+
+**Two independently required acceptance tests before cloning profiles:**
+
+1. **Episode progression:** complete an episode through the configured player; it should be marked watched on the correct Trakt account and Up Next Episodes should advance to the next unwatched episode. Personal profiles must never scrobble to Family or each other.
+2. **Exact timestamp resume:** stop a movie and a TV episode after several minutes using the Kodi Stop control; relaunch each and verify local resume, then repeat after fully quitting Kodi. Cross-device resume from Trakt is an additional test, not assumed to work.
+
+**Add-on candidates — none installed automatically:**
+
+- **TMDb Movies built-in AutoPlay Next Episode:** first option, because this is the existing playback add-on. Confirm the option actually applies when TMDb Helper launches TMDb Movies as its player; the add-on developer says the function is internal to TMDb Movies. Avoid a second auto-next service if it duplicates behaviour.
+- **Official Kodi Up Next `service.upnext`:** good fallback for a Netflix-style next-episode countdown. Its upstream release **1.4.1 (24 Nov 2026)** follows **1.4.0 (15 Nov 2026)**, which explicitly fixed auto-next after an add-on launches playback using `Player.Open`, including TMDb Helper. Requires usable episode metadata / an integration to identify and open the next episode. Enable at most one competing auto-next controller.
+- **Official Kodi Playback Resumer `script.service.playbackresumer`:** optional crash-resilience improvement, periodically saves Kodi's local resume points. Does **not** by itself guarantee reliable resume for plugin-provided streams with changing URLs, or cross-device Trakt playback-position synchronisation.
+- **Trakt:** history and watched episode progression are distinct from reliable minute-accurate playback resume. Avoid simultaneously enabling multiple scrobblers to write the same state without a verified reason.
+
+**Not guaranteed:** No add-on guarantees exact resume for every streaming source, nor automatic next episode from every title. Kodi local resume, the actual player add-on, Trakt metadata/scrobbling and any Up Next service need to work together. Do not replace the confirmed playback configuration or install extra services until an inspection or controlled Xbox test is available.
+
+Sources: https://kodi.tv/addons/omega/script.service.playbackresumer/ , https://kodi.tv/addons/omega/service.upnext/ , https://github.com/im85288/service.upnext , https://kodi.tv/addons/omega/script.trakt/ .
