@@ -139,6 +139,8 @@ def category_hero_title(source_meta, category):
     title = re.sub(r'\[[^\]]*\]', '', title).strip()
     title = re.sub(r'(?i)^see all\s*[-:–—]\s*', '', title).strip()
     title = re.sub(r'(?i)\s*[-:–—]\s*see all(?: first)?$', '', title).strip()
+    if title.casefold() == 'hidden gems (highly rated, less popular)':
+        title = 'Hidden Gems'
     return title or CATEGORIES[category][0]
 
 
