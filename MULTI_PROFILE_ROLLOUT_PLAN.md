@@ -46,4 +46,5 @@ For the two adults, match Cricky's working UI, artwork, Lazy Wall/See All, sourc
 - **No implementation/deployment of these additional profiles has occurred yet.**
 
 ## Immediate Xbox checkpoint
-Upgrade **Home Personalisation v0.1.3 RC** while in Cricky; verify the neutral See All artwork and use **8 Preview Poster style** / **9 Apply Poster style** to match the narrow card dimensions of the other catalogue rows; preview duplicate cleanup and confirm only the four redundant old watchlist/recommendation rows; run cleanup with separate confirmation; restart; verify remaining row order and See All behaviour; confirm Family Trakt in TMDb Helper; final Cricky backup. Do **not** rerun legacy Bulk Setup.
+
+Cricky's duplicate-row cleanup was confirmed working. Install **StreamRow v0.3.1 RC** and **Home Personalisation v0.1.4 RC** in Cricky to test **category-only hero headings on all See All tiles** across Home, Movies, TV Shows, streaming providers, genres and documentaries. Fully restart Kodi. No original Apply Home or legacy Bulk Setup run is needed. Then verify See All pagination/return, Family Trakt sync and final profile backup. The universal hero change remains **Xbox acceptance pending**. See `TV_STREAMING_RC_044_UNIVERSAL_HERO.md`.

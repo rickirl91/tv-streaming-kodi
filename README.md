@@ -8,9 +8,9 @@ This project builds the shared **Cricky** streaming experience on Xbox Kodi with
 
 | Component | Current ZIP | Purpose |
 | --- | --- | --- |
-| Home Personalisation (RC) | `plugin.video.tvstreaming.homepersonalisation-0.1.3-RC.zip` | Three live mixed film/TV rows; standard narrow Poster tiles, corrected See All art, optional cleanup, safe backup |
+| Home Personalisation (RC) | `plugin.video.tvstreaming.homepersonalisation-0.1.4-RC.zip` | Three mixed film/TV rows; clean category hero headings; preserved poster style, artwork and backups |
 | Lazy Wall | `script.tvstreaming.lazywall-0.3.1-RC.zip` | Poster wall, paging, details, playback and trailers |
-| StreamRow | `plugin.video.streamrow-0.3.0-RC.zip` | Skin-friendly See All launcher and category widgets |
+| StreamRow | `plugin.video.streamrow-0.3.1-RC.zip` | See All-first catalogue widgets; category-only hero headings across supported hubs |
 | Bulk Setup | `script.tvstreaming.bulksetup-0.1.0-RC.zip` | One-time safe migration of supported homepage catalogue rows |
 | Catalogue & Preset | `plugin.video.tvstreaming.catalogue-0.2.3.zip` | Original navigation preset and optional playback link |
 
@@ -59,3 +59,13 @@ The reorganisation changes **GitHub file locations only**. It does not change in
 - **Installing alone does not edit Home**. After installing, run #8 and #9 in Cricky, then fully restart Kodi. Do not rerun Bulk Setup or the original Home personalisation.
 - Mixed movie/TV source feeds, artwork/backdrops, playback, watchlists, other Home rows, duplicate-row cleanup and other Kodi profiles are unchanged. **Xbox v0.1.3 tile dimensions still need confirmation.**
 - [Test guide](TV_STREAMING_RC_043_POSTER_STYLE.md).
+
+## Universal category hero headings — 0.3.1 / 0.1.4 RC
+
+Two add-on upgrades make the **large hero heading show the category name whenever a See All tile is focused**, including Home, Movies, TV Shows, provider catalogues and documentary/genre hubs converted through StreamRow. The first film/show fanart is preserved as decorative backdrop but its title/plot is no longer copied to the category launcher. A real film/show selection retains its own details.
+
+- **StreamRow 0.3.1 RC**: fixes catalogue See All tiles across all compatible hubs.
+- **Home Personalisation 0.1.4 RC**: fixes the three mixed Trakt See All category headings.
+- Both are installed as **ZIP upgrades** using existing Kodi source **rickirl91**; **no Apply Home, Bulk Setup, profile migration or widget regeneration is required by the installers**. Fully quit/restart Kodi, then verify different hubs.
+- Exact old installers are retained in `archive/releases/`. Lazy Wall, Trakt, other hubs' raw configuration and all profile data are unchanged.
+- [Release guide](TV_STREAMING_RC_044_UNIVERSAL_HERO.md) and [offline regression tests](tests/test_universal_hero_044.py). **Xbox acceptance pending.**

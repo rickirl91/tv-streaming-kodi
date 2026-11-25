@@ -1,0 +1,28 @@
+name: Verify universal See All category hero RC
+
+on:
+  push:
+    paths:
+      - "plugin.video.streamrow-0.3.1-RC.zip"
+      - "plugin.video.tvstreaming.homepersonalisation-0.1.4-RC.zip"
+      - "src/streamrow/**"
+      - "src/homepersonalisation/**"
+      - "tests/test_universal_hero_044.py"
+      - ".github/workflows/verify-universal-hero-044.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Check both ZIPs, Python syntax, and category-only hero behaviour
+        run: |
+          python -m unittest discover -s tests -p 'test_universal_hero_044.py' -v
+          sha256sum plugin.video.streamrow-0.3.1-RC.zip plugin.video.tvstreaming.homepersonalisation-0.1.4-RC.zip

@@ -163,14 +163,15 @@ def feed_link(kind, mode='widget', nexts=None):
     return 'plugin://{}/?{}'.format(core.ADDON_ID, urlencode(query))
 
 
-def add_folder(handle, label, url, art=None, plot='', properties=None):
+def add_folder(handle, label, url, art=None, plot='', properties=None, hero_title=None):
     item = xbmcgui.ListItem(label=label)
     if art:
         item.setArt(art)
     if properties:
         for key, value in properties.items():
             item.setProperty(key, value)
-    item.setInfo('video', {'title': label, 'plot': plot})
+    item.setInfo('video', {'title': hero_title if hero_title is not None else label,
+                           'plot': '' if hero_title is not None else plot})
     xbmcplugin.addDirectoryItem(handle, url, item, isFolder=True)
 
 
@@ -273,7 +274,8 @@ def handle_feed(handle, query):
         add_folder(handle, 'See All - ' + core.LABEL_BY_KIND[kind],
                    feed_link(kind, 'all'), picture,
                    'Browse movies and TV series together. Follow Next Page to load additional titles.',
-                   properties={'override_landscape': artwork})
+                   properties={'override_landscape': artwork},
+                   hero_title=core.LABEL_BY_KIND[kind])
     for media, entry in combined:
         show_movie_tv_item(handle, media, entry)
     if nexts.get('movie') or nexts.get('tv'):
