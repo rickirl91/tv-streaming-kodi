@@ -55,5 +55,18 @@ class ControllerTests(unittest.TestCase):
         self.assertIsNone(c.finish(True))
         self.assertEqual(c.advance(confirmed=True),"next")
 
+from catalogue import normalize
+
+class CatalogueTests(unittest.TestCase):
+    def test_identity(self):
+        row = dict(file="plugin://plugin.video.themoviedb.helper/?info=details&tmdb_type=tv&tmdb_id=123&season=1&episode=7", season=1, episode=7, firstaired="2020-01-01")
+        cat = normalize("123", [row])
+        self.assertEqual(cat["episodes"][0]["episode_id"], "123:1:7")
+        self.assertFalse(cat["complete"])
+        self.assertIsNone(normalize("456", [row]))
+        self.assertIsNone(normalize("123", [dict(row, episode=8)]))
+        self.assertIsNone(normalize("123", [dict(row, file="https://example.com")]))
+        self.assertIsNone(normalize("123", []))
+
 if __name__ == "__main__":
     unittest.main()
