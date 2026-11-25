@@ -23,5 +23,37 @@ class ResolverTests(unittest.TestCase):
         self.assertIsNone(resolve_next(current(a),dict(cat,episodes=[a,dict(b,air_date="2099-01-01")]),now))
         self.assertIsNone(resolve_next(current(a),dict(cat,episodes=[a,dict(b,air_date="")]),now))
 
+from controller import Controller
+
+class ControllerTests(unittest.TestCase):
+    def test_timing_and_natural_end(self):
+        c = Controller()
+        c.begin("next")
+        self.assertIsNone(c.tick(1600,1800,1))
+        self.assertIsNone(c.tick(1680,1800,0))
+        self.assertEqual(c.tick(1680,1800,1),"offer")
+        self.assertIsNone(c.tick(1700,1800,1))
+        self.assertEqual(c.finish(True),"next")
+        self.assertIsNone(c.finish(True))
+
+    def test_cancel_and_stop(self):
+        for cancel in (True,False):
+            c = Controller()
+            c.begin("next")
+            self.assertEqual(c.tick(550,600,1),"offer")
+            if cancel:
+                c.cancel()
+            self.assertIsNone(c.finish(cancel))
+
+    def test_confirmation(self):
+        c = Controller()
+        for i in range(3):
+            c.begin("next",continuation=i>0)
+            self.assertEqual(c.tick(550,600,1),"still_watching" if i==2 else "offer")
+            if i<2:
+                self.assertEqual(c.finish(True),"next")
+        self.assertIsNone(c.finish(True))
+        self.assertEqual(c.advance(confirmed=True),"next")
+
 if __name__ == "__main__":
     unittest.main()
