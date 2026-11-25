@@ -13,7 +13,7 @@ import xbmcvfs
 
 from catalogue import playback_url, verified_successor
 from controller import Controller
-from diagnostic import snapshot
+from diagnostic import snapshot, rpc
 from overlay import Overlay
 
 HELPER = "plugin.video.themoviedb.helper"
@@ -76,22 +76,22 @@ def resolve(current, filename, report=lambda reason: None):
     from tmdbhelper_lib.api.tmdb.api import TMDb
 
     fetch = TMDb().get_response_json
-    if not current["parent_verified"]:
-        imdb = current["imdb"] or ""
-        if re.fullmatch(r"tt[0-9]+", imdb):
-            # IMDb lookup disambiguates tags whose TMDb ID is episode scoped.
-            found = fetch("find", imdb, external_source="imdb_id") or {}
-            matches = (
-                [row["id"] for row in found.get("tv_results", [])]
-                + [row["show_id"] for row in found.get("tv_episode_results", [])
-                   if (row.get("season_number"), row.get("episode_number")) ==
-                   (current["season"], current["episode"])]
-            )
-            if len(matches) > 1:
-                return None
-            if matches:
-                current["series_id"] = str(matches[0])
+    imdb = current["imdb"] or ""
+    if re.fullmatch(r"tt[0-9]+", imdb):
+        found = fetch("find", imdb, external_source="imdb_id") or {}
+        matches = {str(row["id"]) for row in found.get("tv_results", []) if row.get("id")}
+        matches.update(str(row["show_id"]) for row in found.get("tv_episode_results", [])
+                       if row.get("show_id") and
+                       (row.get("season_number"), row.get("episode_number")) ==
+                       (current["season"], current["episode"]))
+        if len(matches) > 1:
+            report("ambiguous_imdb_parent")
+            return None
+        if matches:
+            current["series_id"] = matches.pop()
+            current["parent_verified"] = False
     if not re.fullmatch(r"[1-9][0-9]*", current["series_id"] or ""):
+        report("parent_id_missing")
         return None
     next_episode = verified_successor(fetch, current, report)
     if next_episode:
@@ -363,6 +363,16 @@ class Service:
                         and not xbmc.getCondVisibility("Player.Paused")
                         and not xbmc.getCondVisibility("Player.Forwarding")
                         and not xbmc.getCondVisibility("Player.Rewinding"))
+        if remaining <= 120 and hasattr(xbmc, "executeJSONRPC"):
+            try:
+                players = rpc("Player.GetActivePlayers", {})
+                video = next((p for p in players if p.get("type") == "video"), None)
+                if video:
+                    speed = rpc("Player.GetProperties", {"playerid": video["playerid"], "properties": ["speed"]}).get("speed")
+                    if isinstance(speed, int):
+                        normal_speed = speed == 1
+            except Exception:
+                pass
         self.last_remaining = remaining if normal_speed and duration > 0 else None
         threshold = 120 if duration >= 1800 else 60
         fullscreen = xbmc.getCondVisibility("Window.IsVisible(fullscreenvideo)")
