@@ -72,7 +72,7 @@ def playback_identity(player):
     return values
 
 
-def resolve(current, filename):
+def resolve(current, filename, report=lambda reason: None):
     from tmdbhelper_lib.api.tmdb.api import TMDb
 
     fetch = TMDb().get_response_json
@@ -93,7 +93,7 @@ def resolve(current, filename):
                 current["series_id"] = str(matches[0])
     if not re.fullmatch(r"[1-9][0-9]*", current["series_id"] or ""):
         return None
-    next_episode = verified_successor(fetch, current)
+    next_episode = verified_successor(fetch, current, report)
     if next_episode:
         next_episode.update(show=current["show"], series_id=current["series_id"],
                             group=current.get("group") or None,
@@ -183,8 +183,9 @@ class Service:
             if (validate_player(filename, order) and
                     (order == "default" and not group or
                      order == "group" and re.fullmatch(r"[A-Za-z0-9_-]{1,64}", group))):
-                target = resolve(current, filename)
-                status = 'successor_verified' if target else 'catalogue_rejected_or_no_successor'
+                reasons = []
+                target = resolve(current, filename, reasons.append)
+                status = 'successor_verified' if target else (reasons[-1] if reasons else 'catalogue_rejected_or_no_successor')
         except Exception as exc:
             status = 'catalogue_exception:' + type(exc).__name__
             xbmc.log("[TV Streaming Next Episode] Catalogue or player unavailable", xbmc.LOGWARNING)
@@ -268,6 +269,8 @@ class Service:
                     continue
                 self.reset(preserve_pending=bool(self.pending))
                 self.armed = kind == "started"
+                if self.armed:
+                    self.next_probe = now + 5
             elif kind == "stopped" and self.pending and self.pending[2] and not self.armed:
                 # Kodi may stop the replaced stream as PlayMedia opens the next.
                 self.pending = self.pending[0], self.pending[1], False
