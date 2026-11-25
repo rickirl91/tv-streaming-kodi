@@ -103,3 +103,7 @@ User confirmed TV episode timestamp resume works. TMDb Movies settings show Auto
 
 ## Custom next episode diagnostic gate
 Kodi 22 RC2; Up Next 1.3.7 failed to show prompt; 1.4.1 installer unverified. Restore existing TMDb Movies prompt and disable Up Next. First test read-only episode metadata and player routing on Xbox. Never log stream URLs or credentials. Only implement autoplay after stable episode identity and next episode routing are verified. Target 60–120 second manual next button, natural-end autoplay, cancel, still-watching after three episodes, no advance on stop/error, profile isolation and watched sync.
+
+
+### Xbox diagnostic 0.1.2 acceptance
+Standalone viewer works. JSON-RPC item identity unknown, but VideoPlayer labels identify Kaleidoscope / White / S01E07; VideoInfoTag independently returns season 1, episode 7 and TMDb/IMDb identifier presence. Timing 61.801 / 2858.585 seconds. Trakt recognition confirmed by user. Identifier scope and next route remain unverified. Resolve exact parent series and current episode against catalogue before selecting next aired episode; never increment blindly. No automatic launch on stop/error or ambiguous identity. Preserve native playback until controlled manual launch test passes.
