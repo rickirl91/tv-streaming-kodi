@@ -4,7 +4,7 @@ from zipfile import ZipFile
 import sys, unittest, tempfile, json, importlib.util, hashlib, os, types
 ID='plugin.video.tvstreaming.homepersonalisation'
 ROOT=Path(__file__).resolve().parents[1]
-ZIP=ROOT/'plugin.video.tvstreaming.homepersonalisation-0.1.3-RC.zip'
+ZIP=ROOT/'archive'/'releases'/'plugin.video.tvstreaming.homepersonalisation-0.1.3-RC.zip'
 
 class PosterStyleTests(unittest.TestCase):
     @classmethod

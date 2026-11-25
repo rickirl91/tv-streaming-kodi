@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Pure, unit-testable Home layout planner and lossless backup/restore helpers.
 
-Only the active Cricky profile's homewidgets file is eligible for writes.
+Widget writes are confined to the active Cricky profile.
 No automatic edits on addon installation, startup or widget browsing.
 """
 import hashlib
@@ -165,23 +165,25 @@ def _atomic_replace(path, content):
             os.unlink(tmp)
 
 
-def apply_home(homepath, backup_root, expected_hash, profile='Cricky', planner=None):
+def apply_home(homepath, backup_root, expected_hash, profile='Cricky', planner=None, *, filename=TARGET_NAME):
     if profile.casefold() != 'cricky':
         raise ValueError('Only the Cricky profile may be changed')
     homepath = Path(homepath)
-    if homepath.name != TARGET_NAME:
+    if homepath.name != filename:
         raise ValueError('Refusing unexpected widget filename')
     old = homepath.read_bytes()
     if sha256(old) != expected_hash:
         raise RuntimeError('Home widgets changed after preview; no changes applied')
-    edited = serialize_home((planner or plan_home)(load_home(old)))
-    if edited == old:
+    original = load_home(old)
+    planned = (planner or plan_home)(original)
+    if planned == original:
         return None
+    edited = serialize_home(planned)
     name = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
     folder = Path(backup_root) / name
     folder.mkdir(parents=True, exist_ok=False)
     # Original bytes are kept exactly, including original encoding and newline style.
-    backup = folder / TARGET_NAME
+    backup = folder / filename
     with open(backup, 'xb') as out:
         out.write(old)
         out.flush()
@@ -191,7 +193,7 @@ def apply_home(homepath, backup_root, expected_hash, profile='Cricky', planner=N
     manifest = {
         'version': 1,
         'profile': profile,
-        'filename': TARGET_NAME,
+        'filename': filename,
         'before_sha256': sha256(old),
         'after_sha256': sha256(edited),
         'created_utc': name,
@@ -216,16 +218,16 @@ def latest_backup(backup_root):
     return folders[0] if folders else None
 
 
-def restore_home(homepath, folder, profile='Cricky'):
+def restore_home(homepath, folder, profile='Cricky', *, filename=TARGET_NAME):
     if profile.casefold() != 'cricky':
         raise ValueError('Only the Cricky profile may be changed')
     homepath, folder = Path(homepath), Path(folder)
     manifest = json.loads((folder / 'manifest.json').read_text('utf-8'))
     if (manifest.get('profile', '').casefold() != profile.casefold()
-            or manifest.get('filename') != TARGET_NAME
-            or homepath.name != TARGET_NAME):
+            or manifest.get('filename') != filename
+            or homepath.name != filename):
         raise ValueError('Backup belongs to a different profile/file')
-    before = (folder / TARGET_NAME).read_bytes()
+    before = (folder / filename).read_bytes()
     if sha256(before) != manifest['before_sha256']:
         raise RuntimeError('Backup checksum mismatch')
     current = homepath.read_bytes()
@@ -254,10 +256,41 @@ def summary(original, proposed):
                 len(old_names), len(new_names), '\n'.join('{}. {}'.format(i + 1, name) for i, name in enumerate(new_names[:8])))
 
 
+HIDDEN_GEMS_OLD = 'Hidden Gems (Highly Rated, Less Popular)'
+WIDGET_FILE = re.compile(r'skinvariables-shortcut-(?:home|[0-9]+)widgets\.json')
+
+
 def plan_hidden_gems(original):
-    """Rename only the exact legacy label, preserving all widget settings."""
+    """Rename the literal legacy widget label, including nested widget groups."""
     if not isinstance(original, list) or not all(isinstance(row, dict) for row in original):
         raise ValueError('Unsupported widget configuration')
-    return [dict(row, label='Hidden Gems')
-            if canonical_label(row.get('label')) == 'hidden gems (highly rated, less popular)'
-            else row for row in original]
+    result = []
+    for row in original:
+        updated = dict(row)
+        if row.get('label') == HIDDEN_GEMS_OLD:
+            source = urlparse(row.get('path') or '')
+            if source.scheme != 'plugin' or source.netloc != 'plugin.video.streamrow':
+                raise ValueError('Hidden Gems widget uses an unexpected catalogue source')
+            updated['label'] = 'Hidden Gems'
+        if isinstance(row.get('widgets'), list):
+            updated['widgets'] = plan_hidden_gems(row['widgets'])
+        result.append(updated)
+    return result
+
+
+def hidden_gems_snapshot(skin_dir):
+    """Locate the actual AF3 widget file before planning or writing any edit."""
+    matches = []
+    for path in sorted(Path(skin_dir).iterdir()):
+        if not WIDGET_FILE.fullmatch(path.name) or path.is_symlink() or not path.is_file():
+            continue
+        raw = path.read_bytes()
+        if HIDDEN_GEMS_OLD.encode() not in raw:
+            continue
+        original = load_home(raw)
+        planned = plan_hidden_gems(original)
+        if original != planned:
+            matches.append((path, raw))
+    if len(matches) > 1:
+        raise ValueError('Hidden Gems occurs in multiple hub files. Use the skin widget editor to identify the active hub.')
+    return matches[0] if matches else None

@@ -8,9 +8,10 @@ This project builds the shared **Cricky** streaming experience on Xbox Kodi with
 
 | Component | Current ZIP | Purpose |
 | --- | --- | --- |
-| Home Personalisation (RC) | `plugin.video.tvstreaming.homepersonalisation-0.1.4-RC.zip` | Three mixed film/TV rows; clean category hero headings; preserved poster style, artwork and backups |
+| Next Episode (RC) | `service.tvstreaming.nextepisode-0.2.0-RC.zip` | Opt-in Cricky Next Episode, Cancel and Still Watching |
+| Home Personalisation (RC) | `plugin.video.tvstreaming.homepersonalisation-0.1.5-RC.zip` | Hidden Gems widget rename with preview and guarded restore |
 | Lazy Wall | `script.tvstreaming.lazywall-0.3.1-RC.zip` | Poster wall, paging, details, playback and trailers |
-| StreamRow | `plugin.video.streamrow-0.3.1-RC.zip` | See All-first catalogue widgets; category-only hero headings across supported hubs |
+| StreamRow | `plugin.video.streamrow-0.3.2-RC.zip` | See All-first catalogue widgets and the Hidden Gems hero correction |
 | Bulk Setup | `script.tvstreaming.bulksetup-0.1.0-RC.zip` | One-time safe migration of supported homepage catalogue rows |
 | Catalogue & Preset | `plugin.video.tvstreaming.catalogue-0.2.3.zip` | Original navigation preset and optional playback link |
 
@@ -69,3 +70,5 @@ Two add-on upgrades make the **large hero heading show the category name wheneve
 - Both are installed as **ZIP upgrades** using existing Kodi source **rickirl91**; **no Apply Home, Bulk Setup, profile migration or widget regeneration is required by the installers**. Fully quit/restart Kodi, then verify different hubs.
 - Exact old installers are retained in `archive/releases/`. Lazy Wall, Trakt, other hubs' raw configuration and all profile data are unchanged.
 - [Release guide](TV_STREAMING_RC_044_UNIVERSAL_HERO.md) and [offline regression tests](tests/test_universal_hero_044.py). **All five GitHub Actions regression tests passed** on 25 November 2026; Xbox acceptance is still pending.
+
+For the consolidated update, follow the [Cricky installation, acceptance and rollback guide](CONSOLIDATED_RC.md).

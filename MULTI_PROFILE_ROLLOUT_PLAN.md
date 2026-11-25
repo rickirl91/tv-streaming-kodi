@@ -107,3 +107,5 @@ Kodi 22 RC2; Up Next 1.3.7 failed to show prompt; 1.4.1 installer unverified. Re
 
 ### Xbox diagnostic 0.1.2 acceptance
 Standalone viewer works. JSON-RPC item identity unknown, but VideoPlayer labels identify Kaleidoscope / White / S01E07; VideoInfoTag independently returns season 1, episode 7 and TMDb/IMDb identifier presence. Timing 61.801 / 2858.585 seconds. Trakt recognition confirmed by user. Identifier scope and next route remain unverified. Resolve exact parent series and current episode against catalogue before selecting next aired episode; never increment blindly. No automatic launch on stop/error or ambiguous identity. Preserve native playback until controlled manual launch test passes.
+
+The consolidated Cricky RC implements the callback-driven Next Episode controller and checks the AF3 profile, player and catalogue before offering a verified successor. See the [consolidated RC guide](CONSOLIDATED_RC.md) for the release contract and physical acceptance checks.

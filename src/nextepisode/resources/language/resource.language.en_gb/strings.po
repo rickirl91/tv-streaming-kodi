@@ -1,0 +1,12 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: en_GB\n"
+
+msgctxt "#32000"
+msgid "Playback"
+msgstr ""
+
+msgctxt "#32001"
+msgid "Enable for Cricky (disable other autoplay controllers first)"
+msgstr ""

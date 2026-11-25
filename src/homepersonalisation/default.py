@@ -439,8 +439,49 @@ def apply_poster_style():
               'The three personalised Home sections should now have standard narrow Poster tiles.')
 
 
+def hidden_gems(action):
+    verify_cricky()
+    skin_dir = os.path.dirname(home_path())
+    root = os.path.join(backups_path(), 'hidden-gems')
+    if action == 'gems_restore':
+        folder = core.latest_backup(root)
+        if folder is None:
+            DIALOG.ok('Hidden Gems', 'There is no Hidden Gems backup.')
+            return
+        filename = json.loads((folder / 'manifest.json').read_text('utf-8'))['filename']
+        if not core.WIDGET_FILE.fullmatch(filename):
+            raise RuntimeError('Unexpected widget backup filename')
+        path = os.path.join(skin_dir, filename)
+        if not DIALOG.yesno('Restore Hidden Gems?', 'Restore the saved widget file {}?'.format(filename)):
+            return
+        verify_cricky()
+        if os.path.dirname(home_path()) != skin_dir or os.path.islink(path):
+            raise RuntimeError('Widget folder or file changed during confirmation')
+        core.restore_home(path, folder, current_profile(), filename=filename)
+    else:
+        match = core.hidden_gems_snapshot(skin_dir)
+        if match is None:
+            DIALOG.ok('Hidden Gems', 'No exact legacy label found in Cricky’s saved Arctic Fuse 3 widgets.')
+            return
+        path, raw = match
+        DIALOG.textviewer('Hidden Gems preview', '{}\n\n{} → Hidden Gems'.format(
+            path.name, core.HIDDEN_GEMS_OLD))
+        if action == 'gems_preview' or not DIALOG.yesno(
+                'Rename Hidden Gems?', 'Save a verified backup and rename the widget in {}?'.format(path.name)):
+            return
+        verify_cricky()
+        if os.path.dirname(home_path()) != skin_dir or path.is_symlink():
+            raise RuntimeError('Widget folder or file changed during confirmation')
+        core.apply_home(path, root, core.sha256(raw), current_profile(),
+                        planner=core.plan_hidden_gems, filename=path.name)
+    xbmc.executebuiltin('RunScript(script.skinvariables,template=special://skin/shortcuts/skinvariables-generator.json)')
+    DIALOG.ok('Hidden Gems', 'Widget configuration saved. Fully quit and restart Kodi.')
+
+
 def handle_action(action):
-    if action == 'inspect':
+    if action in ('gems_preview', 'gems_apply', 'gems_restore'):
+        hidden_gems(action)
+    elif action == 'inspect':
         inspect_only()
     elif action == 'preview':
         preview_only()
@@ -476,6 +517,9 @@ def list_menu(handle):
             ('7. Restore latest automatic backup', 'restore', 'Only if no newer Home edits exist.'),
             ('8. Preview standard Poster tile style (read-only)', 'poster_preview', 'Check the 3 personalised rows before changing their size.'),
             ('9. Apply standard Poster tile style (one confirmation)', 'poster_apply', 'Back up and match the smaller tiles of the catalogue rows.'),
+            ('Preview Hidden Gems rename', 'gems_preview', 'Find the exact label in a saved Cricky hub.'),
+            ('Rename Hidden Gems', 'gems_apply', 'Preview and confirm a backed-up label change.'),
+            ('Restore Hidden Gems widget backup', 'gems_restore', 'Restore the original label if the file has no newer edits.'),
     ):
         add_folder(handle, label,
                    'plugin://{}/?{}'.format(core.ADDON_ID, urlencode({'action': action})),

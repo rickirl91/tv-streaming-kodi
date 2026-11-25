@@ -11,8 +11,8 @@ from pathlib import Path
 from zipfile import ZipFile
 
 ROOT = Path(__file__).resolve().parents[1]
-STREAM_ZIP = ROOT / "plugin.video.streamrow-0.3.1-RC.zip"
-HOME_ZIP = ROOT / "plugin.video.tvstreaming.homepersonalisation-0.1.4-RC.zip"
+STREAM_ZIP = ROOT / "plugin.video.streamrow-0.3.2-RC.zip"
+HOME_ZIP = ROOT / "plugin.video.tvstreaming.homepersonalisation-0.1.5-RC.zip"
 
 
 class FakeListItem:
@@ -70,8 +70,8 @@ class UniversalHeroTests(unittest.TestCase):
             cls.home_xml = z.read("plugin.video.tvstreaming.homepersonalisation/addon.xml")
 
     def test_zip_compatibility_and_source_parity(self):
-        self.assertEqual(ET.fromstring(self.stream_xml).get("version"), "0.3.1")
-        self.assertEqual(ET.fromstring(self.home_xml).get("version"), "0.1.4")
+        self.assertEqual(ET.fromstring(self.stream_xml).get("version"), "0.3.2")
+        self.assertEqual(ET.fromstring(self.home_xml).get("version"), "0.1.5")
         self.assertEqual(self.stream, (ROOT / "src/streamrow/default.py").read_text(encoding="utf-8"))
         self.assertEqual(self.home, (ROOT / "src/homepersonalisation/default.py").read_text(encoding="utf-8"))
         compile(self.stream, "streamrow/default.py", "exec")
@@ -84,6 +84,7 @@ class UniversalHeroTests(unittest.TestCase):
         hero = ns["category_hero_title"]
         for label, expected in (
             ("Netflix Movies", "Netflix Movies"),
+            ("Hidden Gems (Highly Rated, Less Popular)", "Hidden Gems"),
             ("Disney+ Series", "Disney+ Series"),
             ("Trending Movies", "Trending Movies"),
             ("Action — See All First", "Action"),

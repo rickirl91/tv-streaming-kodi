@@ -1,0 +1,26 @@
+<window type="dialog">
+    <defaultcontrol always="true">10</defaultcontrol>
+    <controls>
+        <control type="group">
+            <left>1090</left><top>755</top>
+            <control type="image"><width>760</width><height>252</height><texture colordiffuse="F5202020">common/white.png</texture></control>
+            <control type="image" id="5"><left>24</left><top>24</top><width>205</width><height>128</height><aspectratio>scale</aspectratio></control>
+            <control type="label" id="1"><left>250</left><top>16</top><width>480</width><height>46</height><font>font_head_bold</font></control>
+            <control type="label" id="2"><left>250</left><top>66</top><width>480</width><height>38</height><font>font_main</font></control>
+            <control type="label" id="3"><left>250</left><top>106</top><width>480</width><height>38</height><font>font_mini</font><scroll>true</scroll></control>
+            <control type="label" id="4"><left>250</left><top>148</top><width>480</width><height>30</height><font>font_mini</font></control>
+            <control type="button" id="10">
+                <left>250</left><top>188</top><width>280</width><height>48</height><font>font_mini</font>
+                <align>center</align><aligny>center</aligny>
+                <texturefocus colordiffuse="FFAB2028">common/white.png</texturefocus><texturenofocus colordiffuse="FF414141">common/white.png</texturenofocus>
+                <onleft>11</onleft><onright>11</onright><onup>10</onup><ondown>10</ondown>
+            </control>
+            <control type="button" id="11">
+                <left>545</left><top>188</top><width>175</width><height>48</height><font>font_mini</font><label>Cancel</label>
+                <align>center</align><aligny>center</aligny>
+                <texturefocus colordiffuse="FFAB2028">common/white.png</texturefocus><texturenofocus colordiffuse="FF414141">common/white.png</texturenofocus>
+                <onleft>10</onleft><onright>10</onright><onup>11</onup><ondown>11</ondown>
+            </control>
+        </control>
+    </controls>
+</window>

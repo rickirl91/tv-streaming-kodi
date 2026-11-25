@@ -1,11 +1,20 @@
-name: Verify Next Episode
+name: Verify consolidated Kodi release
 on:
   push:
     paths:
-      - 'src/nextepisode/**'
-      - 'tests/test_next_episode_resolver.py'
+      - 'src/**'
+      - 'tests/**'
+      - '**.zip'
+      - 'index.html'
+      - 'archive/index.html'
+      - 'SHA256SUMS.txt'
+      - 'tools/build-consolidated-rc.py'
       - '.github/workflows/verify-next-episode.yml'
   workflow_dispatch:
+
+permissions:
+  contents: read
+
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -14,5 +23,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: python -m compileall -q src/nextepisode
-      - run: python -m unittest discover -s tests -p test_next_episode_resolver.py -v
+      - run: python -m compileall -q src tests tools/build-consolidated-rc.py
+      - run: python tools/build-consolidated-rc.py --check
+      - run: sha256sum -c SHA256SUMS.txt
+      - run: python -m unittest discover -s tests -v

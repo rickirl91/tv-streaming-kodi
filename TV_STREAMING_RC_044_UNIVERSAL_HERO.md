@@ -47,3 +47,5 @@ On 25 November 2026, [GitHub Actions regression run 45515749295](https://github.
 - Home Personalisation 0.1.4 RC: `59a729f64475dcbc7488147f2ba285c2ddff076e3d8b7dff858bee2b6777d6a9`
 
 These checks do not replace Xbox visual acceptance. The package content is fixed at this checksum; avoid recreating ZIPs under the same filename.
+
+The 0.3.1 and 0.1.4 installers are now in the [archive](archive/). Follow the [consolidated RC guide](CONSOLIDATED_RC.md) for the latest installers.

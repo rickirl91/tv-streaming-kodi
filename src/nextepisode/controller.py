@@ -28,9 +28,13 @@ class Controller:
 
     def cancel(self):
         self.cancelled = True
+        self.consecutive = 0
+
+    def hide(self):
+        self.offered = False
 
     def advance(self, confirmed=False):
-        if not self.target or self.cancelled or self.ended or not self.offered:
+        if not self.target or self.cancelled or self.ended:
             return None
         if self.consecutive >= 2 and not confirmed:
             return None

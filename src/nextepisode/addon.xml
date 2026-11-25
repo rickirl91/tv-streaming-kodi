@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="service.tvstreaming.nextepisode" name="TV Streaming Next Episode Diagnostic" version="0.1.2" provider-name="TV Streaming">
-  <requires><import addon="xbmc.python" version="3.0.0"/></requires>
+<addon id="service.tvstreaming.nextepisode" name="TV Streaming Next Episode" version="0.2.0" provider-name="TV Streaming">
+  <requires><import addon="xbmc.python" version="3.0.0"/><import addon="plugin.video.themoviedb.helper" version="6.22.7"/></requires>
   <extension point="xbmc.service" library="service.py"/>
   <extension point="xbmc.python.script" library="diagnostic.py"><provides>executable</provides></extension>
-  <extension point="xbmc.addon.metadata"><summary lang="en_GB">Read-only playback diagnostic</summary><description lang="en_GB">Inspects playback metadata without changing playback.</description><platform>all</platform></extension>
+  <extension point="xbmc.addon.metadata"><summary lang="en_GB">Cricky Next Episode</summary><description lang="en_GB">Shows the verified next episode and supports opt-in autoplay.</description><platform>all</platform></extension>
 </addon>

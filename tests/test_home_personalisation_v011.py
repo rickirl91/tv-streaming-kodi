@@ -5,11 +5,17 @@ import os
 import tempfile
 import unittest
 from pathlib import Path
+from zipfile import ZipFile
 
-SOURCE = Path('/mnt/data/cricky_v011/plugin.video.tvstreaming.homepersonalisation')
-spec = importlib.util.spec_from_file_location('cricky_core_v011', SOURCE / 'core.py')
-core = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(core)
+SOURCE = (Path(__file__).resolve().parents[1] / 'archive' / 'releases'
+          / 'plugin.video.tvstreaming.homepersonalisation-0.1.1-RC.zip')
+core = importlib.util.module_from_spec(importlib.util.spec_from_loader('cricky_core_v011', loader=None))
+def archived_source(name):
+    with ZipFile(SOURCE) as package:
+        return package.read('plugin.video.tvstreaming.homepersonalisation/' + name).decode('utf-8')
+
+
+exec(compile(archived_source('core.py'), str(SOURCE), 'exec'), vars(core))
 
 
 def home():
@@ -102,15 +108,15 @@ class CrickyV011Tests(unittest.TestCase):
                 core.apply_home(p, Path(folder)/'backup', core.sha256(p.read_bytes()), profile='Master', planner=core.plan_cleanup)
 
     def test_artwork_uses_streamrow_neutral_not_first_title_poster(self):
-        source=(SOURCE/'default.py').read_text()
+        source=archived_source('default.py')
         self.assertIn('see_all_miami_neutral_v024.png',source)
         self.assertIn("picture = {'poster': artwork, 'thumb': artwork, 'icon': artwork}", source)
         self.assertNotIn("picture = {'poster': poster, 'thumb': poster, 'fanart': fanart}", source)
         self.assertIn("picture['fanart'] = fanart",source)
 
     def test_addon_version_and_syntax(self):
-        self.assertIn('version="0.1.1"', (SOURCE/'addon.xml').read_text())
+        self.assertIn('version="0.1.1"', archived_source('addon.xml'))
         for name in ('core.py','default.py'):
-            compile((SOURCE/name).read_text(),name,'exec')
+            compile(archived_source(name),name,'exec')
 
 if __name__=='__main__': unittest.main(verbosity=2)

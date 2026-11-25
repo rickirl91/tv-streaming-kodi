@@ -4,8 +4,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-ROOT = Path(__file__).parent
-spec = importlib.util.spec_from_file_location('core', ROOT / 'plugin.video.tvstreaming.homepersonalisation' / 'core.py')
+ROOT = Path(__file__).resolve().parents[1] / 'src'
+spec = importlib.util.spec_from_file_location('core', ROOT / 'homepersonalisation' / 'core.py')
 core = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(core)
 
@@ -84,6 +84,59 @@ class HomeTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 core.apply_home(home, Path(tmp)/'backups', core.sha256(home.read_bytes()), profile='Ricky')
 
+
+
+
+class HiddenGemsTests(unittest.TestCase):
+    def test_locates_hub_and_renames_only_exact_label(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            hub = root / 'skinvariables-shortcut-1101widgets.json'
+            home = root / core.TARGET_NAME
+            home.write_text(json.dumps([{'label': 'Continue Watching'}]))
+            widget = {
+                'label': core.HIDDEN_GEMS_OLD,
+                'path': 'plugin://plugin.video.streamrow/?mode=wrap&source=opaque&reload=1',
+                'filters': {'rating': 8, 'sort': 'vote_count.asc'},
+                'art': {'thumb': 'icon'},
+            }
+            near = dict(widget, label=core.HIDDEN_GEMS_OLD + ' Picks')
+            rows = [near, {'label': 'Catalogue', 'widgets': [widget]}]
+            raw = json.dumps(rows).encode() + b'\r\n'
+            hub.write_bytes(raw)
+            self.assertEqual(core.hidden_gems_snapshot(root), (hub, raw))
+            plan = core.plan_hidden_gems(rows)
+            self.assertEqual(plan, [near, {'label': 'Catalogue', 'widgets': [
+                dict(widget, label='Hidden Gems')]}])
+            self.assertEqual(core.plan_hidden_gems(plan), plan)
+            options = dict(filename=hub.name)
+            with self.assertRaises(ValueError):
+                core.apply_home(hub, root / 'backup', core.sha256(raw), 'Other',
+                                planner=core.plan_hidden_gems, **options)
+            folder = core.apply_home(hub, root / 'backup', core.sha256(raw),
+                                     planner=core.plan_hidden_gems, **options)
+            self.assertIsNone(core.hidden_gems_snapshot(root))
+            self.assertEqual((folder / hub.name).read_bytes(), raw)
+            applied = hub.read_bytes()
+            hub.write_bytes(applied + b' ')
+            with self.assertRaises(RuntimeError):
+                core.restore_home(hub, folder, **options)
+            hub.write_bytes(applied)
+            self.assertEqual(core.restore_home(hub, folder, **options), 'restored')
+            self.assertEqual(hub.read_bytes(), raw)
+            self.assertEqual(json.loads(home.read_bytes()), [{'label': 'Continue Watching'}])
+
+    def test_ambiguous_hub_or_unexpected_source_refused(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            row = dict(label=core.HIDDEN_GEMS_OLD, path='plugin://other/')
+            with self.assertRaises(ValueError):
+                core.plan_hidden_gems([row])
+            row['path'] = 'plugin://plugin.video.streamrow/?mode=wrap'
+            for name in ('home', '1102'):
+                (root / f'skinvariables-shortcut-{name}widgets.json').write_text(json.dumps([row]))
+            with self.assertRaisesRegex(ValueError, 'multiple hub files'):
+                core.hidden_gems_snapshot(root)
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

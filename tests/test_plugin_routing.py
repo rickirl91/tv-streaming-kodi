@@ -5,12 +5,12 @@ import types
 import unittest
 from pathlib import Path
 
-ROOT = Path(__file__).parent / 'plugin.video.tvstreaming.homepersonalisation'
+ROOT = Path(__file__).resolve().parents[1] / 'src' / 'homepersonalisation'
 for name in ('xbmc', 'xbmcaddon', 'xbmcgui', 'xbmcplugin', 'xbmcvfs'):
     sys.modules[name] = types.ModuleType(name)
 
 xbmc = sys.modules['xbmc']
-xbmc.LOGINFO, xbmc.LOGERROR = 1, 4
+xbmc.LOGINFO, xbmc.LOGWARNING, xbmc.LOGERROR = 1, 3, 4
 xbmc.log = lambda *a: None
 xbmc.getInfoLabel = lambda _: 'Cricky'
 xbmc.getSkinDir = lambda: 'skin.arctic.fuse.3'

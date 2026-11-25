@@ -12,7 +12,7 @@ import unittest
 from urllib.parse import parse_qs, urlparse
 from zipfile import ZipFile
 
-ZIP=Path(__file__).resolve().parents[1]/'plugin.video.tvstreaming.homepersonalisation-0.1.2-RC.zip'
+ZIP=Path(__file__).resolve().parents[1]/'archive'/'releases'/'plugin.video.tvstreaming.homepersonalisation-0.1.2-RC.zip'
 ID='plugin.video.tvstreaming.homepersonalisation'
 
 class Item:

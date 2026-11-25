@@ -1,7 +1,7 @@
 """Pure episode selection; catalogue adapter and playback routing are separate."""
 from datetime import date
 
-def resolve_next(current, catalogue, today=None):
+def resolve_next(current, catalogue, today=None, *, grouped=False):
     """Require verified parent identity, complete ordered catalogue and current match."""
     today = today or date.today()
     if not current.get("series_id") or not current.get("episode_id"):
@@ -11,8 +11,9 @@ def resolve_next(current, catalogue, today=None):
     rows = catalogue.get("episodes", [])
     if any(not isinstance(r.get("season"), int) or not isinstance(r.get("episode"), int) for r in rows):
         return None
-    rows = sorted((r for r in rows if r["season"] > 0 and r["episode"] > 0),
-                  key=lambda r: (r["season"], r["episode"]))
+    rows = [r for r in rows if r["season"] > 0 and r["episode"] > 0]
+    if not grouped:
+        rows.sort(key=lambda r: (r["season"], r["episode"]))
     keys = [(r["season"], r["episode"]) for r in rows]
     if len(keys) != len(set(keys)):
         return None
