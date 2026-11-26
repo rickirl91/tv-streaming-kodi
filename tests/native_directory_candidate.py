@@ -14,7 +14,7 @@ def directory_successor(rpc, current, report=lambda reason: None):
     response = rpc("Files.GetDirectory", {"directory": url, "media": "video",
         "properties": ["title", "showtitle", "season", "episode", "firstaired", "premiered", "uniqueid"]})
     rows = response.get("files", []) if isinstance(response, dict) else []
-    if not rows or response.get("limits", {}).get("total", len(rows)) != len(rows):
+    if not rows or response.get("limits") != {"start": 0, "end": len(rows), "total": len(rows)}:
         return report("directory_empty_or_partial")
     for row in rows:
         ids = row.get("uniqueid") or {}
