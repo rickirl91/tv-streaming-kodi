@@ -20,17 +20,24 @@ def directory_successor(rpc, current, report=lambda reason: None):
     summaries = directory("seasons")
     if not summaries:
         return report("directory_seasons_missing")
-    counts = {}
-    for row in summaries:
-        n, count = row.get("season"), row.get("episode")
-        if type(n) is not int or n < 0 or n in counts or type(count) is not int or count < 0:
-            return report("directory_season_counts_invalid")
+    def season_count(number):
+        matches = [row for row in summaries if type(row.get("season")) is int
+                   and row["season"] == number]
+        if len(matches) != 1:
+            report("directory_season_summary_missing_or_duplicate:" + str(number))
+            return None
+        row = matches[0]
+        count = row.get("episode")
+        if type(count) is not int or count < 1:
+            report("directory_season_count_invalid:" + str(number))
+            return None
         if str((row.get("uniqueid") or {}).get("tvshow.tmdb")) != series:
-            return report("directory_season_parent_mismatch")
-        counts[n] = count
-    regular = sorted(n for n in counts if n > 0)
-    if not regular or regular != list(range(1, len(regular)+1)) or season not in regular:
-        return report("directory_season_sequence_invalid")
+            report("directory_season_parent_mismatch:" + str(number))
+            return None
+        return count
+    count = season_count(season)
+    if count is None:
+        return None
     url = "plugin://plugin.video.themoviedb.helper/?" + urlencode(
         dict(info="episodes", tmdb_type="tv", tmdb_id=series, season=season))
     response = rpc("Files.GetDirectory", {"directory": url, "media": "video",
@@ -57,17 +64,18 @@ def directory_successor(rpc, current, report=lambda reason: None):
     ordered = sorted(normalized["episodes"], key=lambda r: r["episode"])
     if any(r["season"] != season for r in ordered) or [r["episode"] for r in ordered] != list(range(1, len(ordered)+1)):
         return report("directory_noncontiguous")
-    if len(ordered) != counts[season]:
+    if len(ordered) != count:
         return report("directory_count_mismatch")
     if episode < 1 or episode > len(ordered):
         return report("directory_boundary_unverified")
     if not same_title(current["title"], ordered[episode-1], "title"):
         return report("directory_current_title_mismatch")
     if episode == len(ordered):
-        if season + 1 not in counts:
-            return report("directory_finale")
+        following_count = season_count(season + 1)
+        if following_count is None:
+            return None
         following = directory("episodes", season=season+1)
-        if not following or len(following) != counts[season+1]:
+        if not following or len(following) != following_count:
             return report("directory_following_incomplete")
         if any(str((r.get("uniqueid") or {}).get("tvshow.tmdb")) != series or r.get("showtitle","").casefold().strip() != current["show"].casefold().strip() for r in following):
             return report("directory_following_identity")
