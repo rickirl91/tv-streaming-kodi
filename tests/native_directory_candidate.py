@@ -6,16 +6,27 @@ def directory_successor(rpc, current, report=lambda reason: None):
     from urllib.parse import urlencode
     from datetime import date
     series = str(current.get("series_id") or "")
-    if not series.isdecimal() or not current.get("parent_verified") or current.get("group"):
+    if not series.isdecimal() or current.get("group"):
         return report("directory_parent_unverified_or_grouped")
     season, episode = current["season"], current["episode"]
     url = "plugin://plugin.video.themoviedb.helper/?" + urlencode(
         dict(info="episodes", tmdb_type="tv", tmdb_id=series, season=season))
     response = rpc("Files.GetDirectory", {"directory": url, "media": "video",
-        "properties": ["title", "showtitle", "season", "episode", "firstaired", "uniqueid"]})
+        "properties": ["title", "showtitle", "season", "episode", "firstaired", "premiered", "uniqueid"]})
     rows = response.get("files", []) if isinstance(response, dict) else []
     if not rows or response.get("limits", {}).get("total", len(rows)) != len(rows):
         return report("directory_empty_or_partial")
+    for row in rows:
+        ids = row.get("uniqueid") or {}
+        if ids.get("tvshow.tmdb") != series:
+            return report("directory_parent_mismatch")
+    current_rows = [r for r in rows if r.get("season") == season and r.get("episode") == episode]
+    if len(current_rows) != 1:
+        return report("directory_current_missing")
+    ids = current_rows[0].get("uniqueid") or {}
+    if not current.get("parent_verified") and (not current.get("imdb") or current["imdb"] not in (ids.get("imdb"), ids.get("tvshow.imdb"))):
+        return report("directory_imdb_mismatch")
+    rows = [dict(r, firstaired=r.get("firstaired") or r.get("premiered")) for r in rows]
     normalized = normalize(series, rows)
     if not normalized:
         return report("directory_invalid_rows")
