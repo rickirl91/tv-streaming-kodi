@@ -78,3 +78,17 @@ class NativeDirectoryTests(unittest.TestCase):
         self.assertIsNone(self.target())
         self.current.update(group=None, episode=4, title="Phantom Traveler", imdb="tt0713617")
         self.assertIsNone(self.target())
+
+    def test_unrelated_invalid_summary(self):
+        self.summaries.extend([dict(season=0, episode=-1), dict(season=-1),
+                               dict(season=3, episode=None)])
+        self.assertEqual(self.target()["episode"], 4)
+
+    def test_duplicate_current_summary(self):
+        self.summaries.append(dict(self.summaries[0]))
+        self.assertIsNone(self.target())
+
+    def test_invalid_following_summary(self):
+        self.current.update(episode=4, title="Phantom Traveler", imdb="tt0713617")
+        self.summaries.append(dict(season=2, episode=-1))
+        self.assertIsNone(self.target())
