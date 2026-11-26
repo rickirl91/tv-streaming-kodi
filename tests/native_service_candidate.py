@@ -77,6 +77,7 @@ def resolve(current, filename, report=lambda reason: None):
     if not current.get("group"):
         target = directory_successor(rpc, current, report)
         if target:
+            target.setdefault("art", "")
             target.update(show=current["show"], series_id=current["series_id"],
                           group=None, url=playback_url(current["series_id"], target, filename))
         return target
