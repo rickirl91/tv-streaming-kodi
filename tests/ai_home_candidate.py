@@ -74,7 +74,8 @@ def plan_home(original):
     ai = [r for r in remaining if r.get('path') == AI_PATH or canonical_label(r['label']) == canonical_label(AI_LABEL)]
     if ai:
         plan_ai_suggestions(original)
-        remaining = [r for r in remaining if r is not ai[0]]
+        # Already installed: retain all existing fields, including custom styling.
+        return original
     result = [progress_row] + ai + new_rows + remaining
     assert len(result) == len(remaining) + 4 + len(ai)
     assert result[0] is progress_row
