@@ -2,7 +2,7 @@ import sys
 import unittest
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src" / "nextepisode"))
-from catalogue import directory_successor
+from native_directory_candidate import directory_successor
 
 class DirectoryTests(unittest.TestCase):
     def setUp(self):
