@@ -20,8 +20,34 @@ class NativeDirectoryTests(unittest.TestCase):
                 ("Dead in the Water","tt0713613"), ("Phantom Traveler","tt0713617")], 1)]
         self.limits = dict(start=0, end=4, total=4)
 
+        self.summaries = [dict(season=1, episode=4, uniqueid={"tvshow.tmdb":"1622"})]
+        self.following = []
+
+    def rpc(self, method, params):
+        url = params["directory"]
+        if "info=seasons" in url:
+            rows = self.summaries
+        elif "season=2" in url:
+            rows = self.following
+        else:
+            return dict(files=self.rows, limits=self.limits)
+        return dict(files=rows, limits=dict(start=0,end=len(rows),total=len(rows)))
+
     def target(self):
-        return directory_successor(lambda method, params: dict(files=self.rows, limits=self.limits), self.current)
+        return directory_successor(self.rpc, self.current)
+
+    def test_transition(self):
+        self.current.update(episode=4, title="Phantom Traveler", imdb="tt0713617")
+        self.summaries.append(dict(season=2, episode=1, uniqueid={"tvshow.tmdb":"1622"}))
+        self.following = [dict(self.rows[0], season=2, title="Next season",
+                               file=self.rows[0]["file"].replace("season=1","season=2"))]
+        self.assertEqual((self.target()["season"], self.target()["episode"]), (2,1))
+        self.following.clear()
+        self.assertIsNone(self.target())
+
+    def test_declared_count_mismatch(self):
+        self.summaries[0]["episode"] = 22
+        self.assertIsNone(self.target())
 
     def test_premiered_fallback(self):
         self.assertEqual(self.target()["title"], "Phantom Traveler")
