@@ -29,6 +29,7 @@ b6cad1676caf7c7be1c6808dac6c7de98cc5a66040545d30ecd099355028631c  archive/releas
 738f2bc068fcf93443c3ebb1b7f2208fa340499a39b3d1f9c2c7d6bdc69eff44  archive/releases/service.tvstreaming.nextepisode-0.1.2-RC.zip
 f022fe7479997383ee2470a87080a72b3bbd8e874511b52efaf7b7ddc89e00bb  archive/releases/service.tvstreaming.nextepisode-0.2.0-RC.zip
 6a7bf55112442e7dc503c8ddddea64861df287c3e7e20334df862e1c0a4668b7  archive/releases/service.tvstreaming.nextepisode-0.2.1-RC.zip
+510a2264cf003849a1cbd90c1799eb1209b023ceb12c87e68dc253778908fe58  archive/releases/service.tvstreaming.nextepisode-0.2.2-RC.zip
 13869153f00a35fba724e93a894fd5ff02e36868a9a9e193ba44dc9b5c501e9a  plugin.video.streamrow-0.2.5-RC.zip
 9720882357da7e55f7b782fa1d7373b136fbff91ebd17329889b0679bf6c2930  plugin.video.streamrow-0.3.2-RC.zip
 a856e76d15b3ba5651be1ae5e2c2065c900b9b7de2a83ca9824d49284d676291  plugin.video.tvstreaming.catalogue-0.2.2.zip
@@ -44,7 +45,7 @@ e6355ca7ec87b335a04c18e3bada6e0eabf65ec3d46fd40206d0acd541bf6092  repository.tvs
 5e03d80e050fa02ac82388bd1ec11d55f375932202cf7192a6065886766aac17  script.tvstreaming.nextviewer-0.1.0-RC.zip
 887eb1318086442ed10f656aa8c75e6e30f48bb0422cf7f4bb9957035675c3d8  service.tvstreaming.nextepisode-0.1.0-RC.zip
 aa857e96808d9219da0b4e5c19191880174173c6b113dcba54d7705e35198924  service.tvstreaming.nextepisode-0.1.1-RC.zip
-510a2264cf003849a1cbd90c1799eb1209b023ceb12c87e68dc253778908fe58  service.tvstreaming.nextepisode-0.2.2-RC.zip
+dc8c49ab31025b303e6fd027b5026880795f66ed85e3e83b5ee75361a2b3b0a5  service.tvstreaming.nextepisode-0.2.3-RC.zip
 dfd0859c2add11631dd7496e1bc0f13fb352459bbd31f2b96aaa4310347a11f8  zips/plugin.video.streamrow/plugin.video.streamrow-0.1.0.zip
 56f1d14f5ae2fe63e6b126b4b73f5c7f88c77fe0b6df1282bcd0008e8d7fa16a  zips/plugin.video.streamrow/plugin.video.streamrow-0.2.1-RC.zip
 93a7bf2c38463fee3795d513a11371742372101791fb199aaaf2f00f7c575708  zips/plugin.video.streamrow/plugin.video.streamrow-0.2.2-RC.zip
