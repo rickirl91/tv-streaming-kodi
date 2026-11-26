@@ -140,7 +140,7 @@ class ServiceTests(unittest.TestCase):
     def test_native_service_adapter(self):
         candidate = Path(__file__).resolve().parent / "native_service_candidate.py"
         with patch.dict(sys.modules, {"xbmc": self.kodi,
-                "xbmcaddon": SimpleNamespace(), "xbmcgui": SimpleNamespace(),
+                "xbmcaddon": SimpleNamespace(), "xbmcgui": SimpleNamespace(WindowXMLDialog=object),
                 "xbmcvfs": SimpleNamespace()}):
             spec = importlib.util.spec_from_file_location("native_service_test", candidate)
             module = importlib.util.module_from_spec(spec)
