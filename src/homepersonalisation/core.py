@@ -71,8 +71,13 @@ def plan_home(original):
         'target': 'videos',
         'widget_style': 'Poster',
     } for kind, label, _ in LABELS]
-    result = [progress_row] + new_rows + remaining
-    assert len(result) == len(remaining) + 4
+    ai = [r for r in remaining if r.get('path') == AI_PATH or canonical_label(r['label']) == canonical_label(AI_LABEL)]
+    if ai:
+        plan_ai_suggestions(original)
+        # Already installed: retain all existing fields, including custom styling.
+        return original
+    result = [progress_row] + ai + new_rows + remaining
+    assert len(result) == len(remaining) + 4 + len(ai)
     assert result[0] is progress_row
     return result
 
@@ -94,15 +99,16 @@ def cleanup_candidates(original):
     """Return exact-index obsolete rows only after verifying the new Home hub."""
     if not isinstance(original, list) or len(original) < 4 or not all(isinstance(r, dict) for r in original):
         raise ValueError('Unsupported or incomplete Cricky Home widgets')
+    offset = 1 if original[1].get('path') == AI_PATH and original[1].get('label') == AI_LABEL else 0
     expected = ['continue watching'] + [canonical_label(label) for _, label, _ in LABELS]
-    actual = [canonical_label(row.get('label')) for row in original[:4]]
+    actual = [canonical_label(row.get('label')) for row in (original[:1] + original[1+offset:4+offset])]
     if actual != expected:
         raise ValueError('Home first four rows are not the approved Cricky layout; cleanup refused')
     for idx, (kind, _, _) in enumerate(LABELS, 1):
-        if original[idx].get('path') != widget_path(kind):
+        if original[idx+offset].get('path') != widget_path(kind):
             raise ValueError('Personalised widget source differs from installed RC; cleanup refused')
     return [(index, row) for index, row in enumerate(original)
-            if index >= 4 and canonical_label(row.get('label')) in OBSOLETE_LABELS]
+            if index >= 4+offset and canonical_label(row.get('label')) in OBSOLETE_LABELS]
 
 
 def plan_cleanup(original):
@@ -118,7 +124,8 @@ def poster_style_candidates(original):
     no similarly named unrelated widgets or other hubs can be modified.
     """
     cleanup_candidates(original)  # Validates target profile Home layout.
-    return [(i, original[i]) for i in (1, 2, 3)
+    offset = 1 if original[1].get('path') == AI_PATH else 0
+    return [(i, original[i]) for i in range(1+offset, 4+offset)
             if original[i].get('widget_style') != 'Poster']
 
 
@@ -294,3 +301,23 @@ def hidden_gems_snapshot(skin_dir):
     if len(matches) > 1:
         raise ValueError('Hidden Gems occurs in multiple hub files. Use the skin widget editor to identify the active hub.')
     return matches[0] if matches else None
+
+
+AI_LABEL = 'Your AI Suggestions'
+AI_PATH = 'plugin://plugin.video.themoviedb.helper/?info=mdblist_userlist&list_id=247247'
+
+def plan_ai_suggestions(original):
+    """Insert exactly one AI row, preserving every existing widget."""
+    if not isinstance(original, list) or not all(isinstance(r, dict) for r in original):
+        raise ValueError('Unsupported Home layout')
+    matches = [i for i, r in enumerate(original)
+               if canonical_label(r.get('label')) == canonical_label(AI_LABEL)
+               or r.get('path') == AI_PATH]
+    if matches:
+        if matches != [1] or original[1].get('path') != AI_PATH or original[1].get('label') != AI_LABEL:
+            raise ValueError('Conflicting AI widget; no changes made')
+        cleanup_candidates(original[:1] + original[2:])
+        return original
+    cleanup_candidates(original)
+    return original[:1] + [dict(label=AI_LABEL, icon='', path=AI_PATH,
+                                target='videos', widget_style='Poster')] + original[1:]

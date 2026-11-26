@@ -18,6 +18,7 @@ c30b8e0ed33446d7147b158903f8917ff100b369c03526df7928a3002552d72a  archive/releas
 87a04551a433fb73219d066bf9a3b35f5bfdf82c3b862319aebc842649ebd0f4  archive/releases/plugin.video.tvstreaming.homepersonalisation-0.1.2-RC.zip
 999bbccbe04147d9f37f48dfbde20fd24ec0366a88da87de30855c429ac78b5f  archive/releases/plugin.video.tvstreaming.homepersonalisation-0.1.3-RC.zip
 59a729f64475dcbc7488147f2ba285c2ddff076e3d8b7dff858bee2b6777d6a9  archive/releases/plugin.video.tvstreaming.homepersonalisation-0.1.4-RC.zip
+6ba176a8aabec9d1a53f07ffdd477e10bbe597db23f8ac350300df6436b6f038  archive/releases/plugin.video.tvstreaming.homepersonalisation-0.1.5-RC.zip
 63c2e259c41c2336d490cc46978a9cb8c88258876928333a56e46d2a3ec8fa25  archive/releases/script.tvstreaming.lazywall-0.1.0.zip
 264b806ac6e2c200c271b1f3e7107dbf14a6efef5dd60bbfdb76874303908f3f  archive/releases/script.tvstreaming.lazywall-0.1.1.zip
 54b3c2bdd4678b57f9c3df069de4fef863e28a9321c0bbd0c55907ef7079fb32  archive/releases/script.tvstreaming.lazywall-0.1.2.zip
@@ -39,7 +40,7 @@ c083deb7d5602e2874d9cba074e269b8c7b88deaf120f718c94905fcf76999ae  archive/releas
 9720882357da7e55f7b782fa1d7373b136fbff91ebd17329889b0679bf6c2930  plugin.video.streamrow-0.3.2-RC.zip
 a856e76d15b3ba5651be1ae5e2c2065c900b9b7de2a83ca9824d49284d676291  plugin.video.tvstreaming.catalogue-0.2.2.zip
 d6db7a02cf9f559fb52f25d8c90c4880d9e809c670c7a935f9f1b6d64fbda6ac  plugin.video.tvstreaming.catalogue-0.2.3.zip
-6ba176a8aabec9d1a53f07ffdd477e10bbe597db23f8ac350300df6436b6f038  plugin.video.tvstreaming.homepersonalisation-0.1.5-RC.zip
+166b1b713209d32aa5ca7968c7b302101d51def44a774b54463b45a4458152d3  plugin.video.tvstreaming.homepersonalisation-0.1.6-RC.zip
 562a6b53c4c03c7da6af67724fa5fe4de7967206f1715cae4ec353446aa76353  repository.angelitto-1.0.2.zip
 90b948218329546fdd6be472475b98f3d093eba84d9b41707304ea0e7622203c  repository.redwizard-1.2.2.zip
 12e64c294ee3d1e0f58b3ac709fbc5527efe0039dc243391881a019f9f18a675  repository.tvstreaming.catalogue-1.0.0.zip

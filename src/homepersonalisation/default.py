@@ -478,7 +478,34 @@ def hidden_gems(action):
     DIALOG.ok('Hidden Gems', 'Widget configuration saved. Fully quit and restart Kodi.')
 
 
+def ai_suggestions(apply=False):
+    verify_cricky()
+    path = home_path()
+    raw = open(path, 'rb').read()
+    original = core.load_home(raw)
+    planned = core.plan_ai_suggestions(original)
+    if planned == original:
+        DIALOG.ok('Your AI Suggestions', 'Already installed.')
+        return
+    records = tmdb_directory(core.AI_PATH)
+    if not records:
+        raise RuntimeError('AI list is empty or unavailable; Home unchanged.')
+    DIALOG.textviewer('AI Suggestions preview', 'Insert Your AI Suggestions below Continue Watching.\\nAll existing rows preserved.\\nSource returned {} entries.'.format(len(records)))
+    if not apply or not DIALOG.yesno('Add Your AI Suggestions?', 'Back up and update Cricky Home?'):
+        return
+    verify_cricky()
+    if home_path() != path:
+        raise RuntimeError('Profile path changed')
+    core.apply_home(path, backups_path(), core.sha256(raw), current_profile(),
+                    planner=core.plan_ai_suggestions)
+    xbmc.executebuiltin('RunScript(script.skinvariables,template=special://skin/shortcuts/skinvariables-generator.json)')
+    DIALOG.ok('Your AI Suggestions', 'Saved. Fully restart Kodi.')
+
+
 def handle_action(action):
+    if action in ('ai_preview', 'ai_apply'):
+        ai_suggestions(action == 'ai_apply')
+        return
     if action in ('gems_preview', 'gems_apply', 'gems_restore'):
         hidden_gems(action)
     elif action == 'inspect':
@@ -517,6 +544,8 @@ def list_menu(handle):
             ('7. Restore latest automatic backup', 'restore', 'Only if no newer Home edits exist.'),
             ('8. Preview standard Poster tile style (read-only)', 'poster_preview', 'Check the 3 personalised rows before changing their size.'),
             ('9. Apply standard Poster tile style (one confirmation)', 'poster_apply', 'Back up and match the smaller tiles of the catalogue rows.'),
+            ('Preview Your AI Suggestions', 'ai_preview', 'Check the list and proposed Home insertion.'),
+            ('Add Your AI Suggestions', 'ai_apply', 'Preview and confirm a backed-up Home update.'),
             ('Preview Hidden Gems rename', 'gems_preview', 'Find the exact label in a saved Cricky hub.'),
             ('Rename Hidden Gems', 'gems_apply', 'Preview and confirm a backed-up label change.'),
             ('Restore Hidden Gems widget backup', 'gems_restore', 'Restore the original label if the file has no newer edits.'),
