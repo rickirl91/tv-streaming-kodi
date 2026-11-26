@@ -30,3 +30,10 @@ class AIHomeTests(unittest.TestCase):
         self.original[1]['path'] = 'unexpected'
         with self.assertRaises(ValueError):
             plan_ai_suggestions(self.original)
+
+    def test_maintenance_preserves_ai(self):
+        from ai_home_candidate import plan_home, plan_cleanup, plan_poster_style
+        result = plan_ai_suggestions(self.original)
+        self.assertEqual(plan_home(result), result)
+        self.assertEqual(plan_cleanup(result), result)
+        self.assertEqual(plan_poster_style(result), result)
