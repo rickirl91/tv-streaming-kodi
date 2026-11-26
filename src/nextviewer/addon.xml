@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="script.tvstreaming.nextviewer" name="TV Streaming Next Episode Viewer" version="0.1.0" provider-name="TV Streaming">
-<requires><import addon="xbmc.python" version="3.0.0"/></requires>
+<addon id="script.tvstreaming.nextviewer" name="TV Streaming Next Episode Viewer" version="0.1.1" provider-name="TV Streaming">
+<requires><import addon="xbmc.python" version="3.0.0"/><import addon="service.tvstreaming.nextepisode" version="0.2.3"/></requires>
 <extension point="xbmc.python.script" library="default.py"><provides>executable</provides></extension>
 <extension point="xbmc.addon.metadata"><summary lang="en_GB">View captured playback metadata</summary><description lang="en_GB">Read-only viewer for Next Episode Diagnostic.</description><platform>all</platform></extension>
 </addon>

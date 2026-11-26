@@ -10,7 +10,7 @@ from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 ROOT = Path(__file__).resolve().parents[1]
 ARCHIVE = ROOT / "archive" / "releases"
 STREAM_ASSET = "resources/media/see_all_miami_neutral_v024.png"
-SOURCES = ("nextepisode", "streamrow", "homepersonalisation")
+SOURCES = ("nextepisode", "streamrow", "homepersonalisation", "nextviewer")
 
 
 def packages():

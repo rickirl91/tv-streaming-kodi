@@ -26,6 +26,7 @@ af9b0e2038e8119ca9d43e3d96fe52578753aade0622620ec9cd17101dfd4ec8  archive/releas
 0572f9f4f1fe8c78ad9fb46ac45a8386922cd4f3f882b2827f66e1178f2d7d8f  archive/releases/script.tvstreaming.lazywall-0.2.0-RC.zip
 ede274392086ed1fd848014dc4110942378482a956228e1288ba3b3fc83a725f  archive/releases/script.tvstreaming.lazywall-0.2.1-RC.zip
 b6cad1676caf7c7be1c6808dac6c7de98cc5a66040545d30ecd099355028631c  archive/releases/script.tvstreaming.lazywall-0.2.2-RC.zip
+5e03d80e050fa02ac82388bd1ec11d55f375932202cf7192a6065886766aac17  archive/releases/script.tvstreaming.nextviewer-0.1.0-RC.zip
 738f2bc068fcf93443c3ebb1b7f2208fa340499a39b3d1f9c2c7d6bdc69eff44  archive/releases/service.tvstreaming.nextepisode-0.1.2-RC.zip
 f022fe7479997383ee2470a87080a72b3bbd8e874511b52efaf7b7ddc89e00bb  archive/releases/service.tvstreaming.nextepisode-0.2.0-RC.zip
 6a7bf55112442e7dc503c8ddddea64861df287c3e7e20334df862e1c0a4668b7  archive/releases/service.tvstreaming.nextepisode-0.2.1-RC.zip
@@ -42,7 +43,7 @@ e6355ca7ec87b335a04c18e3bada6e0eabf65ec3d46fd40206d0acd541bf6092  repository.tvs
 544ea9fe3276c9f139dda2cd0f3632c56037065d1499f73acf6276cc061f31d9  script.tvstreaming.bulksetup-0.1.0-RC.zip
 16424276655fb3ee48117b56abca472b4d860299931c9fb768f59b96bd6c3149  script.tvstreaming.lazywall-0.3.0-RC.zip
 605d0f42cd73d2ca29eb64fd7f050c9fddacaad6487a4e599754d8f492e33dd6  script.tvstreaming.lazywall-0.3.1-RC.zip
-5e03d80e050fa02ac82388bd1ec11d55f375932202cf7192a6065886766aac17  script.tvstreaming.nextviewer-0.1.0-RC.zip
+332656763e3bfecd64eb84cf7d3b27bcf6c5e635c15cd2994824e0b20a7f4c7c  script.tvstreaming.nextviewer-0.1.1-RC.zip
 887eb1318086442ed10f656aa8c75e6e30f48bb0422cf7f4bb9957035675c3d8  service.tvstreaming.nextepisode-0.1.0-RC.zip
 aa857e96808d9219da0b4e5c19191880174173c6b113dcba54d7705e35198924  service.tvstreaming.nextepisode-0.1.1-RC.zip
 dc8c49ab31025b303e6fd027b5026880795f66ed85e3e83b5ee75361a2b3b0a5  service.tvstreaming.nextepisode-0.2.3-RC.zip

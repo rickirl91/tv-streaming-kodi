@@ -1,4 +1,10 @@
+"""Launch the service diagnostic through the visible program add-on."""
+import os
+import xbmc
+import xbmcaddon
 import xbmcgui
-window = xbmcgui.Window(10000)
-data = window.getProperty("tvstreaming.nextdiagnostic")
-xbmcgui.Dialog().textviewer("Next Episode Diagnostic", data or "No snapshot captured. Restart Kodi, play an episode for 60 seconds, stop and reopen this viewer.")
+try:
+    path = xbmcaddon.Addon("service.tvstreaming.nextepisode").getAddonInfo("path")
+    xbmc.executebuiltin("RunScript(" + os.path.join(path, "diagnostic.py") + ")")
+except Exception:
+    xbmcgui.Dialog().ok("Next Episode Viewer", "Next Episode 0.2.3 is required.")
