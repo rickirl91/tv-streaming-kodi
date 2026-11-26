@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="service.tvstreaming.nextepisode" name="TV Streaming Next Episode" version="0.2.2" provider-name="TV Streaming">
+<addon id="service.tvstreaming.nextepisode" name="TV Streaming Next Episode" version="0.2.3" provider-name="TV Streaming">
   <requires><import addon="xbmc.python" version="3.0.0"/><import addon="plugin.video.themoviedb.helper" version="6.22.7"/></requires>
   <extension point="xbmc.service" library="service.py"/>
   <extension point="xbmc.python.script" library="diagnostic.py"><provides>executable</provides></extension>
