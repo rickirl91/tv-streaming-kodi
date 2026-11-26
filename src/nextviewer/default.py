@@ -5,7 +5,7 @@ import xbmcaddon
 import xbmcgui
 
 dialog = xbmcgui.Dialog()
-choice = dialog.select("TV Streaming diagnostic", ["Playback report", "Overlay preview", "Independent Supernatural catalogue test"])
+choice = dialog.select("TV Streaming diagnostic", ["Playback report", "Overlay preview", "Independent Supernatural catalogue test", "Native directory test"])
 if choice == 0:
     dialog.textviewer("Playback report", xbmcgui.Window(10000).getProperty("tvstreaming.nextdiagnostic") or "No snapshot captured.")
 elif choice == 1:
@@ -57,3 +57,17 @@ elif choice == 2:
         report["failure_stage"] = stage
         report["error"] = type(exc).__name__
     dialog.textviewer("Independent catalogue test", json.dumps(report, indent=2))
+
+elif choice == 3:
+    report = {}
+    for label, query in [
+        ("seasons", "info=seasons&tmdb_type=tv&tmdb_id=1622"),
+        ("episodes", "info=episodes&tmdb_type=tv&tmdb_id=1622&season=1")]:
+        try:
+            result = json.loads(xbmc.executeJSONRPC(json.dumps(dict(jsonrpc="2.0", id=1, method="Files.GetDirectory", params=dict(directory="plugin://plugin.video.themoviedb.helper/?"+query, media="video", properties=["title","showtitle","season","episode","firstaired","uniqueid"])))))
+            data = result.get("result", {})
+            rows = data.get("files", [])
+            report[label] = dict(count=len(rows), limits=data.get("limits"), error=result.get("error", {}).get("code"), sample=[{k:r.get(k) for k in ("title","showtitle","season","episode","firstaired","uniqueid")} for r in rows[:4]])
+        except Exception as exc:
+            report[label] = dict(error=type(exc).__name__)
+    dialog.textviewer("Native directory test", json.dumps(report, indent=2))
