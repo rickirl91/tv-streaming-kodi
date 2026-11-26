@@ -12,6 +12,7 @@ import xbmcgui
 import xbmcvfs
 
 from catalogue import playback_url, verified_successor
+from native_directory import directory_successor
 from controller import Controller
 from diagnostic import snapshot, rpc
 from overlay import Overlay
@@ -73,6 +74,13 @@ def playback_identity(player):
 
 
 def resolve(current, filename, report=lambda reason: None):
+    if not current.get("group"):
+        target = directory_successor(rpc, current, report)
+        if target:
+            target.setdefault("art", "")
+            target.update(show=current["show"], series_id=current["series_id"],
+                          group=None, url=playback_url(current["series_id"], target, filename))
+        return target
     from tmdbhelper_lib.api.tmdb.api import TMDb
 
     api = TMDb()
