@@ -137,6 +137,28 @@ class ServiceTests(unittest.TestCase):
         self.target["url"] = self.module.playback_url("123", self.target, "tmdbmovies.json")
         self.service.controller.begin(self.target)
 
+    def test_native_service_adapter(self):
+        candidate = Path(__file__).resolve().parent / "native_service_candidate.py"
+        with patch.dict(sys.modules, {"xbmc": self.kodi,
+                "xbmcaddon": SimpleNamespace(), "xbmcgui": SimpleNamespace(),
+                "xbmcvfs": SimpleNamespace()}):
+            spec = importlib.util.spec_from_file_location("native_service_test", candidate)
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+        current = dict(series_id="1622", show="Supernatural", title="Dead in the Water",
+                       season=1, episode=3, imdb="tt0713613", group="")
+        with patch.object(module, "directory_successor", return_value=dict(
+                season=1, episode=4, title="Phantom Traveler", episode_id="1622:1:4")) as resolver:
+            target = module.resolve(current, "tmdbmovies.json")
+            query = parse_qs(urlparse(target["url"]).query)
+            self.assertEqual(query["tmdb_id"], ["1622"])
+            self.assertEqual(query["episode"], ["4"])
+            self.assertEqual(query["player"], ["tmdbmovies.json"])
+            self.assertEqual(query["allow_playlist"], ["false"])
+            resolver.assert_called_once()
+        with patch.object(module, "directory_successor", return_value=None):
+            self.assertIsNone(module.resolve(current, "tmdbmovies.json"))
+
     def visible(self, condition):
         return {
             "System.AddonIsEnabled(service.upnext)": self.upnext,
