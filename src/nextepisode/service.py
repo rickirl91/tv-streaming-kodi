@@ -75,7 +75,17 @@ def playback_identity(player):
 def resolve(current, filename, report=lambda reason: None):
     from tmdbhelper_lib.api.tmdb.api import TMDb
 
-    fetch = TMDb().get_response_json
+    api = TMDb()
+    def fetch(*args, **kwargs):
+        payload = api.get_response_json(*args, **kwargs)
+        endpoint = "/".join(str(x) for x in args)
+        if isinstance(payload, dict):
+            fields = ",".join(k for k in ("id", "status_code", "success", "tv_results", "tv_episode_results", "seasons", "episodes") if k in payload)
+            code = payload.get("status_code")
+            report("api:" + endpoint + ":fields=" + fields + ":code=" + str(code if isinstance(code, int) else "-"))
+        else:
+            report("api:" + endpoint + ":type=" + type(payload).__name__)
+        return payload
     imdb = current["imdb"] or ""
     if re.fullmatch(r"tt[0-9]+", imdb):
         found = fetch("find", imdb, external_source="imdb_id") or {}
@@ -189,16 +199,16 @@ class Service:
         except Exception as exc:
             status = 'catalogue_exception:' + type(exc).__name__
             xbmc.log("[TV Streaming Next Episode] Catalogue or player unavailable", xbmc.LOGWARNING)
-        self.result = generation, current, target, status
+        self.result = generation, current, target, status, [r for r in locals().get('reasons', []) if r.startswith('api:')]
 
     def probe(self, now):
         if self.worker and self.worker.is_alive():
             return
         if self.result is not None:
-            generation, identity, target, status = self.result
+            generation, identity, target, status, requests = self.result
             self.result = None
             if generation == self.generation and self.armed:
-                self.record_status(status)
+                self.record_status(status, requests=requests, helper_version=xbmcaddon.Addon(HELPER).getAddonInfo('version'))
                 if target or status == 'no_eligible_successor' or self.attempts >= 3:
                     self.adopt(identity, target)
                 else:
