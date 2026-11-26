@@ -150,6 +150,7 @@ class ServiceTests(unittest.TestCase):
         with patch.object(module, "directory_successor", return_value=dict(
                 season=1, episode=4, title="Phantom Traveler", episode_id="1622:1:4")) as resolver:
             target = module.resolve(current, "tmdbmovies.json")
+            self.assertEqual(target["art"], "")
             query = parse_qs(urlparse(target["url"]).query)
             self.assertEqual(query["tmdb_id"], ["1622"])
             self.assertEqual(query["episode"], ["4"])
