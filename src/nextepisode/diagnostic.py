@@ -44,7 +44,20 @@ if __name__ == "__main__":
     try:
         current = xbmcgui.Window(10000).getProperty("tvstreaming.nextdiagnostic") or snapshot()
         dialog = xbmcgui.Dialog()
-        if dialog.yesno("TV Streaming diagnostic", "Preview the overlay? No opens the playback report."):
+        choice = dialog.select("TV Streaming diagnostic", ["Playback report", "Overlay preview", "Independent Supernatural catalogue test"])
+        if choice == 2:
+            from service import resolve
+            reasons = []
+            identity = dict(show="Supernatural", title="Dead in the Water", season=1, episode=3, series_id="1622", parent_verified=False, imdb="tt0460681", group="")
+            try:
+                target = resolve(identity, "preview.json", reasons.append)
+                result = {"verified": bool(target), "requests": reasons}
+                if target:
+                    result["next"] = {k: target[k] for k in ("season", "episode", "title")}
+            except Exception as exc:
+                result = {"error": type(exc).__name__, "requests": reasons}
+            dialog.textviewer("Independent catalogue test", json.dumps(result, indent=2))
+        elif choice == 1:
             if xbmc.Player().isPlaying():
                 dialog.ok("Preview", "Stop playback before previewing.")
             else:
@@ -60,7 +73,7 @@ if __name__ == "__main__":
                             break
                 finally:
                     preview.close()
-        else:
+        elif choice == 0:
             dialog.textviewer("TV Streaming playback diagnostic", current)
     except Exception:
         xbmcgui.Dialog().ok("TV Streaming playback diagnostic", "Could not read playback metadata.")
