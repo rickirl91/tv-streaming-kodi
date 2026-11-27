@@ -43,6 +43,7 @@ d6db7a02cf9f559fb52f25d8c90c4880d9e809c670c7a935f9f1b6d64fbda6ac  plugin.video.t
 1036516789c39c8a264b0d11d53f54cce37ee48e6323862e691d163876934ce5  plugin.video.tvstreaming.homepersonalisation-0.1.10-RC.zip
 f838fff3f9b9a0761fb70f09891105164d0b5c729df2dd235da279b52e2bb932  plugin.video.tvstreaming.homepersonalisation-0.1.11-RC.zip
 d0944cc20e9cce1bfbc10546bd1df059bb09b64618effead83706caa40663cda  plugin.video.tvstreaming.homepersonalisation-0.1.12-RC.zip
+c066c50bfa2b8567ae798e1925d281f57758e3ee7eb0e3a65e7879fd7b9e0247  plugin.video.tvstreaming.homepersonalisation-0.1.13-RC.zip
 166b1b713209d32aa5ca7968c7b302101d51def44a774b54463b45a4458152d3  plugin.video.tvstreaming.homepersonalisation-0.1.6-RC.zip
 cecb46991e5eda7dc60c6419270b25c203448b0adeec5b12d252c5bcddcb6b7b  plugin.video.tvstreaming.homepersonalisation-0.1.7-RC.zip
 760b0edbc6d827f123f8a2cf6b21814339ce85b4cf07275505007a65e230793d  plugin.video.tvstreaming.homepersonalisation-0.1.8-RC.zip
