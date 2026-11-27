@@ -1,5 +1,5 @@
 """Candidate adapter. Preserve source records and fail open on storage failure."""
-from continue_watching_candidate import filter_rows, identity
+from continue_watching_candidate import identity
 
 SOURCE = 'plugin://plugin.video.themoviedb.helper/?info=sync_currentlywatching&tmdb_type=both&widget=true&reload='
 PROPERTIES = ['title', 'showtitle', 'season', 'episode', 'year', 'plot', 'art',
@@ -18,7 +18,7 @@ def fetch_visible(rpc, store):
         hidden = store.read()
     except Exception:
         return rows
-    return filter_rows(rows, hidden)
+    return [row for row in rows if dismissal_key(row) not in hidden]
 
 def dismissal_key(record):
     key = identity(record.get('file', ''))
