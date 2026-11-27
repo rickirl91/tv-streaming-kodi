@@ -86,3 +86,4 @@ a5980283037542bae5c151168c7570b05ba76c8059aaa33fbc89641333ab45ca  plugin.video.t
 6a06cf301ee355734c68560afaccfbb3866213e31daa23b19f105c6b557863cf  plugin.video.tvstreaming.homepersonalisation-0.1.15-RC.zip
 66bf31fe1399066ed73ae90facc520e69f5e9788c534487734c577cc1aeacca2  plugin.video.tvstreaming.homepersonalisation-0.1.16-RC.zip
 113b7a7c618d7c19175c3143f4598718669cce3ff8c5928401b831550d8cbeff  plugin.video.tvstreaming.homepersonalisation-0.1.17-RC.zip
+a9647f1fb28a612a87772ce4e85df1135aef1abf4e3c97f2cbde8bec74475d3a  script.tvstreaming.safesearch-0.1.0-RC.zip
