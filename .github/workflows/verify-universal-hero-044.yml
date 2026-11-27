@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - "plugin.video.streamrow-0.3.2-RC.zip"
-      - "plugin.video.tvstreaming.homepersonalisation-0.1.5-RC.zip"
+      - "plugin.video.tvstreaming.homepersonalisation-0.1.6-RC.zip"
       - "src/streamrow/**"
       - "src/homepersonalisation/**"
       - "tests/test_universal_hero_044.py"
@@ -25,4 +25,4 @@ jobs:
       - name: Check both ZIPs, Python syntax, and category-only hero behaviour
         run: |
           python -m unittest discover -s tests -p 'test_universal_hero_044.py' -v
-          sha256sum plugin.video.streamrow-0.3.2-RC.zip plugin.video.tvstreaming.homepersonalisation-0.1.5-RC.zip
+          sha256sum plugin.video.streamrow-0.3.2-RC.zip plugin.video.tvstreaming.homepersonalisation-0.1.6-RC.zip
