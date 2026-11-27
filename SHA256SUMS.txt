@@ -42,6 +42,7 @@ a856e76d15b3ba5651be1ae5e2c2065c900b9b7de2a83ca9824d49284d676291  plugin.video.t
 d6db7a02cf9f559fb52f25d8c90c4880d9e809c670c7a935f9f1b6d64fbda6ac  plugin.video.tvstreaming.catalogue-0.2.3.zip
 166b1b713209d32aa5ca7968c7b302101d51def44a774b54463b45a4458152d3  plugin.video.tvstreaming.homepersonalisation-0.1.6-RC.zip
 cecb46991e5eda7dc60c6419270b25c203448b0adeec5b12d252c5bcddcb6b7b  plugin.video.tvstreaming.homepersonalisation-0.1.7-RC.zip
+760b0edbc6d827f123f8a2cf6b21814339ce85b4cf07275505007a65e230793d  plugin.video.tvstreaming.homepersonalisation-0.1.8-RC.zip
 562a6b53c4c03c7da6af67724fa5fe4de7967206f1715cae4ec353446aa76353  repository.angelitto-1.0.2.zip
 90b948218329546fdd6be472475b98f3d093eba84d9b41707304ea0e7622203c  repository.redwizard-1.2.2.zip
 12e64c294ee3d1e0f58b3ac709fbc5527efe0039dc243391881a019f9f18a675  repository.tvstreaming.catalogue-1.0.0.zip
