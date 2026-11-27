@@ -1,0 +1,11 @@
+# Cricky Safe Search 0.1.0 RC
+Xbox isolation: AF3 Home Search repeatedly crashed after playback, while direct TMDb Helper Search worked with both Estuary and AF3. AF3 3.5.11 upstream Includes_Home.xml hardcodes its magnifying glass to Skin Variables multisearch. This candidate bypasses that route, not a proven fix of the upstream fault.
+
+Install the new standalone ZIP from the rickirl91 file source once published. Do not change Home Personalisation 0.1.17, dismissal state, display settings, autoplay, Trakt or other add-ons. From Cricky, open Program add-ons > TV Streaming - Cricky Safe Search (RC). Run Test native Search (no changes), search You, play S5E1, stop, return Home, remain for at least 60 seconds. If it crashes, stop; do not apply. If stable, run Apply safe Home Search, confirm, fully quit and restart Kodi. Use the original magnifying glass to search the same title. Test a movie separately and test cancel/empty search and navigation without playback. Report the result. No new background services.
+
+Technical scope: explicit opt-in only, exact AF3 version 3.5.11, exact single matching Home Search include/action, XML validation, atomic write and verified original backup under the active Cricky profile. The skin XML is shared, but the inserted condition uses System.ProfileName and falls back to the unchanged original action for all other profiles; the script itself also refuses non-Cricky use. No kids-profile changes are intended. The standard Kodi keyboard collects the query and opens a native Videos window with TMDb Helper's documented search endpoint tmdb_type=both. The original custom search widget UI is intentionally bypassed. This may show a different result layout. Kodi runtime and profile switching still require acceptance. Future skin updates may replace the patch; version changes are refused.
+
+Rollback before uninstalling: run Restore original Home Search in Cricky while on AF3 3.5.11, confirm, then fully restart. Restore refuses to overwrite subsequent edits. Never reset or reinstall the skin just to apply this candidate. If the add-on refuses to patch, report the message; do not force a write.
+
+Upstream source: https://github.com/jurialmunkey/skin.arctic.fuse.3/blob/omega/1080i/Includes_Home.xml
+Search contract: https://github.com/jurialmunkey/plugin.video.themoviedb.helper/wiki/Lists-Related
