@@ -40,6 +40,7 @@ c083deb7d5602e2874d9cba074e269b8c7b88deaf120f718c94905fcf76999ae  archive/releas
 9720882357da7e55f7b782fa1d7373b136fbff91ebd17329889b0679bf6c2930  plugin.video.streamrow-0.3.2-RC.zip
 a856e76d15b3ba5651be1ae5e2c2065c900b9b7de2a83ca9824d49284d676291  plugin.video.tvstreaming.catalogue-0.2.2.zip
 d6db7a02cf9f559fb52f25d8c90c4880d9e809c670c7a935f9f1b6d64fbda6ac  plugin.video.tvstreaming.catalogue-0.2.3.zip
+1036516789c39c8a264b0d11d53f54cce37ee48e6323862e691d163876934ce5  plugin.video.tvstreaming.homepersonalisation-0.1.10-RC.zip
 166b1b713209d32aa5ca7968c7b302101d51def44a774b54463b45a4458152d3  plugin.video.tvstreaming.homepersonalisation-0.1.6-RC.zip
 cecb46991e5eda7dc60c6419270b25c203448b0adeec5b12d252c5bcddcb6b7b  plugin.video.tvstreaming.homepersonalisation-0.1.7-RC.zip
 760b0edbc6d827f123f8a2cf6b21814339ce85b4cf07275505007a65e230793d  plugin.video.tvstreaming.homepersonalisation-0.1.8-RC.zip
