@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="script.tvstreaming.safesearch" name="TV Streaming - Cricky Safe Search (RC)" version="0.2.0" provider-name="TV Streaming">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0" />
+    <import addon="plugin.video.themoviedb.helper" />
+  </requires>
+  <extension point="xbmc.python.script" library="default.py" />
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Native combined movie and TV Search launcher</summary>
+    <description lang="en_GB">Cricky-only launcher for native Kodi keyboard and TMDb Helper title search. No skin edits, no background service, no settings changes.</description>
+    <platform>all</platform>
+    <license>MIT</license>
+  </extension>
+</addon>
