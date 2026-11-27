@@ -19,7 +19,10 @@ NEW_LINE = ('            <param name="action">' + TARGET + '</param>').encode('a
 
 
 def validate(raw, patched=False):
-    tree = ET.fromstring(raw)
+    try:
+        tree = ET.fromstring(raw)
+    except ET.ParseError as exc:
+        raise ValueError('Malformed skin XML; refusing to edit.') from exc
     if tree.tag != 'includes':
         raise ValueError('Unexpected Includes_Home.xml root.')
     includes = [x for x in tree.findall('include') if x.get('name') == INCLUDE]
