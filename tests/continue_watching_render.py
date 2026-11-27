@@ -10,6 +10,9 @@ def render(record, gui, plugin, handle, dismiss_command):
     if isinstance(art, dict):
         item.setArt(art)
     info = {k: record[k] for k in ('title','plot','year','rating','playcount','season','episode','mediatype') if record.get(k) is not None}
+    key = dismissal_key(record)
+    if key and not info.get('mediatype'):
+        info['mediatype'] = 'movie' if key.startswith('movie:') else ('episode' if record.get('episode', -1) >= 0 else 'tvshow')
     if record.get('showtitle'):
         info['tvshowtitle'] = record['showtitle']
     item.setInfo('video', info)
