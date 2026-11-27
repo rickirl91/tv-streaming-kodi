@@ -12,7 +12,7 @@ from zipfile import ZipFile
 
 ROOT = Path(__file__).resolve().parents[1]
 STREAM_ZIP = ROOT / "plugin.video.streamrow-0.3.2-RC.zip"
-HOME_ZIP = ROOT / "plugin.video.tvstreaming.homepersonalisation-0.1.5-RC.zip"
+HOME_ZIP = ROOT / "plugin.video.tvstreaming.homepersonalisation-0.1.6-RC.zip"
 
 
 class FakeListItem:
@@ -71,7 +71,7 @@ class UniversalHeroTests(unittest.TestCase):
 
     def test_zip_compatibility_and_source_parity(self):
         self.assertEqual(ET.fromstring(self.stream_xml).get("version"), "0.3.2")
-        self.assertEqual(ET.fromstring(self.home_xml).get("version"), "0.1.5")
+        self.assertEqual(ET.fromstring(self.home_xml).get("version"), "0.1.6")
         self.assertEqual(self.stream, (ROOT / "src/streamrow/default.py").read_text(encoding="utf-8"))
         self.assertEqual(self.home, (ROOT / "src/homepersonalisation/default.py").read_text(encoding="utf-8"))
         compile(self.stream, "streamrow/default.py", "exec")
