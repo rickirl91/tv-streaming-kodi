@@ -81,10 +81,9 @@ def run(xbmc, xbmcvfs, rpc, refresh):
                             break
                         if key:
                             store.journal('Before activity update')
-                            store.record_viewing(key)
-                            store.finish(i)
-                            store.journal('Activity committed')
-                            changed = True
+                            if store.commit_pending(i,key):
+                                store.journal('Activity committed')
+                                changed = True
                     if changed and not player.isPlaying() and profile == xbmcvfs.translatePath('special://profile/') and xbmc.getCondVisibility('Window.IsActive(home)'):
                         store.journal('Before Home refresh')
                         refresh()

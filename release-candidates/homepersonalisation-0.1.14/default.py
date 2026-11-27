@@ -584,6 +584,9 @@ def cw_diagnostics():
     report = json.loads(window.getProperty(prefix + 'last') or '{}')
     lines.extend('{}: {}'.format(k,v) for k,v in report.items())
     try:
+        stage = cw_store().path.with_name('cw-stage.txt')
+        lines.append('Persistent stage: ' + (stage.read_text(encoding='utf-8') if stage.exists() else 'none'))
+        lines.append('Pending viewing: ' + str(len(cw_store().pending())))
         native = cw_rpc('Files.GetDirectory', {'directory': cw_feed.SOURCE, 'media': 'video', 'properties': cw_feed.PROPERTIES})
         lines.append('Native feed: ' + ', '.join(str(cw_feed.dismissal_key(row)) for row in native.get('files', [])))
         lines.append('Currently hidden: ' + ', '.join(cw_store().read()))

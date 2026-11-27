@@ -13,6 +13,7 @@ class DismissalStore:
         db = sqlite3.connect(str(self.path), timeout=5)
         db.execute('CREATE TABLE IF NOT EXISTS dismissed (identity TEXT PRIMARY KEY, label TEXT NOT NULL)')
         db.execute('CREATE TABLE IF NOT EXISTS activity (identity TEXT PRIMARY KEY, sequence INTEGER NOT NULL)')
+        db.execute('CREATE TABLE IF NOT EXISTS pending_viewing (id INTEGER PRIMARY KEY, report TEXT NOT NULL)')
         return db
 
     def read(self):
@@ -23,6 +24,8 @@ class DismissalStore:
         validated = dismiss({}, key, label)
         with closing(self.connect()) as db, db:
             db.execute('INSERT OR REPLACE INTO dismissed VALUES (?, ?)', (key, validated[key]['label']))
+            # Conservatively invalidate queued viewing on any newer manual dismissal.
+            db.execute('DELETE FROM pending_viewing')
 
     def viewed(self, key, *, verified=False):
         if not verified:
@@ -66,3 +69,15 @@ class DismissalStore:
     def finish(self, i):
         with closing(self.connect()) as db, db:
             db.execute('DELETE FROM pending_viewing WHERE id = ?', (i,))
+
+    def commit_pending(self, i, key):
+        dismiss({}, key, '')
+        with closing(self.connect()) as db, db:
+            db.execute('BEGIN IMMEDIATE')
+            if not db.execute('SELECT 1 FROM pending_viewing WHERE id=?', (i,)).fetchone():
+                return False
+            sequence = db.execute('SELECT COALESCE(MAX(sequence),0)+1 FROM activity').fetchone()[0]
+            db.execute('INSERT OR REPLACE INTO activity VALUES (?,?)', (key,sequence))
+            db.execute('DELETE FROM dismissed WHERE identity=?', (key,))
+            db.execute('DELETE FROM pending_viewing WHERE id=?', (i,))
+            return True
