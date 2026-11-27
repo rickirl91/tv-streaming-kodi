@@ -84,3 +84,4 @@ b6cad1676caf7c7be1c6808dac6c7de98cc5a66040545d30ecd099355028631c  zips/script.tv
 605d0f42cd73d2ca29eb64fd7f050c9fddacaad6487a4e599754d8f492e33dd6  zips/script.tvstreaming.lazywall/script.tvstreaming.lazywall-0.3.1-RC.zip
 a5980283037542bae5c151168c7570b05ba76c8059aaa33fbc89641333ab45ca  plugin.video.tvstreaming.homepersonalisation-0.1.14-RC.zip
 6a06cf301ee355734c68560afaccfbb3866213e31daa23b19f105c6b557863cf  plugin.video.tvstreaming.homepersonalisation-0.1.15-RC.zip
+66bf31fe1399066ed73ae90facc520e69f5e9788c534487734c577cc1aeacca2  plugin.video.tvstreaming.homepersonalisation-0.1.16-RC.zip
