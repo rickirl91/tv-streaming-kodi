@@ -4,7 +4,7 @@ from continue_watching_candidate import identity
 SOURCE = 'plugin://plugin.video.themoviedb.helper/?info=sync_currentlywatching&tmdb_type=both&widget=true&reload='
 PROPERTIES = ['title', 'showtitle', 'season', 'episode', 'year', 'plot', 'art',
               'thumbnail', 'fanart', 'rating', 'playcount', 'uniqueid',
-              'resume', 'runtime', 'file', 'mediatype']
+              'resume', 'runtime', 'file']
 
 def fetch_visible(rpc, store):
     response = rpc('Files.GetDirectory', {'directory': SOURCE, 'media': 'video',
