@@ -1,0 +1,31 @@
+name: Build Diag Widget Launcher RC
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publish-diagsetup-021.yml'
+      - 'release-candidates/diagsetup-0.2.1/**'
+      - 'tools/build-diagsetup-021.py'
+      - 'tests/test_diagsetup_021.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s tests -p test_diagsetup_021.py -v
+      - run: python tools/build-diagsetup-021.py
+      - run: grep '  script.tvstreaming.diagsetup-0.2.1-RC.zip$' SHA256SUMS.txt | sha256sum -c -
+      - name: Publish verified setup
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add script.tvstreaming.diagsetup-0.2.1-RC.zip SHA256SUMS.txt index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Publish verified Diag Widget Setup"
+          git push origin HEAD:main
