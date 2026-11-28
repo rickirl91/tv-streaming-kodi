@@ -1,0 +1,31 @@
+name: Build widget performance RC
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publish-widget-performance-001.yml'
+      - 'tools/build-widget-performance-001.py'
+      - 'tests/test_widget_performance_001.py'
+      - 'release-candidates/widget-performance-001/**'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s tests -p test_widget_performance_001.py -v
+      - run: python tools/build-widget-performance-001.py
+      - run: grep -E '  (plugin.video.streamrow-0.3.3-RC.zip|plugin.video.tvstreaming.homepersonalisation-0.1.18-RC.zip)$' SHA256SUMS.txt | sha256sum -c -
+      - name: Publish verified candidates
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add plugin.video.streamrow-0.3.3-RC.zip plugin.video.tvstreaming.homepersonalisation-0.1.18-RC.zip SHA256SUMS.txt index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Publish widget performance RC"
+          git push origin HEAD:main
