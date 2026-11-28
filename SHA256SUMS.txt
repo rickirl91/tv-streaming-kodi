@@ -93,3 +93,4 @@ d7e4778dc536631bb9b574a637965728365cbabe3a44cf28cf77d401772a5327  plugin.video.s
 1a117d3cf7382f9e110541f2173d9df89e613b2dd61921b6a46b620207cf9090  script.tvstreaming.diagsetup-0.1.0-RC.zip
 9678b56a466554c3e3a99cd60991ea86b688c84ef344c7bea2fb05bba3cf3c85  script.tvstreaming.diagsetup-0.2.0-RC.zip
 c276e162a05d8c449c58bd839e8b0d348d01ffb626cce55754cd3f3f9b28aa8d  script.tvstreaming.diagsetup-0.2.1-RC.zip
+f8c777ec2bfa9ef47c84c11f7c5508b2c82182e11a80c9d3e6e87be22f23fae3  script.tvstreaming.diagsetup-0.2.2-RC.zip
