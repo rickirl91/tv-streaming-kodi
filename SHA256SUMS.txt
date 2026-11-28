@@ -88,3 +88,5 @@ a5980283037542bae5c151168c7570b05ba76c8059aaa33fbc89641333ab45ca  plugin.video.t
 113b7a7c618d7c19175c3143f4598718669cce3ff8c5928401b831550d8cbeff  plugin.video.tvstreaming.homepersonalisation-0.1.17-RC.zip
 a9647f1fb28a612a87772ce4e85df1135aef1abf4e3c97f2cbde8bec74475d3a  script.tvstreaming.safesearch-0.1.0-RC.zip
 cca90f7baae9ccc5e3d0729ffe3124d0c9e11565d76b44e5d430200c03033fff  script.tvstreaming.safesearch-0.2.0-RC.zip
+d7e4778dc536631bb9b574a637965728365cbabe3a44cf28cf77d401772a5327  plugin.video.streamrow-0.3.3-RC.zip
+6d339e67207b76eccd83e56b4ad0eeb663f8e3b729f7c40e9cde47741192ee77  plugin.video.tvstreaming.homepersonalisation-0.1.18-RC.zip
