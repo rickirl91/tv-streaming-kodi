@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="script.tvstreaming.diagsetup" name="TV Streaming - Diag Widget Setup" version="0.1.0" provider-name="TV Streaming">
+  <requires><import addon="xbmc.python" version="3.0.0"/><import addon="plugin.video.themoviedb.helper"/><import addon="script.skinvariables"/></requires>
+  <extension point="xbmc.python.script" library="default.py"><provides>executable</provides></extension>
+  <extension point="xbmc.addon.metadata"><summary lang="en_GB">Native diagnostic Home widget setup</summary><description lang="en_GB">Explicit diag-only setup and restore; no service, no accounts, no custom widget feeds.</description><platform>all</platform><license>MIT</license></extension>
+</addon>
