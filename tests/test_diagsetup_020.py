@@ -1,0 +1,70 @@
+import tempfile, unittest, json, sys
+from pathlib import Path
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'release-candidates'/'diagsetup-0.2.0'))
+import core
+
+class TestDiag(unittest.TestCase):
+    def test_paths(self):
+        rows=json.loads(core.deferred())
+        self.assertEqual(len(rows),10)
+        for i,r in enumerate(rows):
+            self.assertIn(core.prop(i),r['path'])
+            self.assertTrue(core.native(i).startswith('plugin://plugin.video.themoviedb.helper/'))
+        self.assertEqual([r['label'] for r in rows],[r['label'] for r in json.loads(core.planned())])
+    def test_upgrade_restore(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d)
+            target=core.safe_path(root,core.REL)
+            backup=core.safe_path(root,core.BACKUP)
+            core.atomic(target,core.planned())
+            core.atomic(backup,b'{"original":null}')
+            core.apply(root,core.planned(),'staggered')
+            self.assertEqual(core.mode(root),'staggered')
+            core.apply(root,core.deferred(),'lazy')
+            self.assertEqual(core.mode(root),'lazy')
+            self.assertEqual(backup.read_bytes(),b'{"original":null}')
+            core.restore(root)
+            self.assertFalse(target.exists())
+            self.assertEqual(core.mode(root),'standard')
+    def test_guard(self):
+        with tempfile.TemporaryDirectory() as d:
+            p=Path(d)/'profiles'/'diag'
+            self.assertEqual(core.verify('diag','skin.arctic.fuse.3',p,d),p)
+            with self.assertRaises(ValueError):
+                core.verify('Cricky','skin.arctic.fuse.3',p,d)
+            with self.assertRaises(ValueError):
+                core.verify('diag','skin.arctic.fuse.3',d,d)
+    def test_stagger(self):
+        s=core.Scheduler('staggered')
+        self.assertEqual(s.tick(0,True,None,{}),[0,1])
+        self.assertEqual(s.tick(1,True,None,{}),[])
+        self.assertEqual(s.tick(2,False,None,{0:True}),[])
+        self.assertEqual(s.tick(3,True,None,{0:True}),[2])
+        self.assertEqual(len(s.pending),2)
+        self.assertEqual(s.tick(4,True,None,{1:True,2:True}),[3,4])
+    def test_lazy(self):
+        s=core.Scheduler('lazy')
+        self.assertEqual(s.tick(0,True,None,{}),[0,1])
+        self.assertEqual(s.tick(2,True,0,{0:True,1:True}),[])
+        self.assertEqual(s.tick(3,True,1,{}),[2])
+        self.assertEqual(s.tick(4,False,8,{2:True}),[])
+        self.assertEqual(s.tick(5,True,2,{2:True}),[3])
+        self.assertEqual(s.tick(6,True,0,{3:True}),[])
+    def test_timeout(self):
+        s=core.Scheduler('staggered')
+        s.tick(0,True,None,{})
+        self.assertEqual(s.tick(46,True,None,{}),[])
+        self.assertTrue(s.failed)
+        self.assertEqual(s.tick(47,True,None,{0:True,1:True}),[])
+    def test_newer_edit(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d)
+            core.apply(root,None,'lazy')
+            target=core.safe_path(root,core.REL)
+            core.atomic(target,b'[]')
+            with self.assertRaises(ValueError):
+                core.apply(root,b'[]','standard')
+            with self.assertRaises(ValueError):
+                core.restore(root)
+if __name__=='__main__':
+    unittest.main()
